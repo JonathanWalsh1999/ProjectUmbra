@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Utility\Input.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Timer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\CMatrix4x4.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\CVector2.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\CVector3.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GraphicsHelpers.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MAINGame.cpp" />
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>SceneFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11Engine.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="extern.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsMain.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>EngineFiles</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utility\ColourRGBA.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Input.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Timer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CMatrix4x4.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CVector2.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CVector3.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathHelpers.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GraphicsHelpers.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>SceneFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11Engine.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="externs.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{3b75a466-1b3f-44db-90a2-73a9bfc56583}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maths">
+      <UniqueIdentifier>{739716ac-bd96-4e4c-b3a2-61c7fdfdea4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{1d198607-cf52-46a9-8994-554d241d97a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineFiles">
+      <UniqueIdentifier>{04c3ef27-ab29-43f0-811e-80fdf2899ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneFiles">
+      <UniqueIdentifier>{c427af6f-596c-45b5-9c85-46fe3de73fb2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Common.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="LightModel_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LightModel_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelLighting_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelLighting_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SphereModel_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SphereModel_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeModel_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeModel_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalMapping_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalMapping_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ParallaxMapping_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ParallaxMapping_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DepthOnly_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BasicTransform_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="test_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="test_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
