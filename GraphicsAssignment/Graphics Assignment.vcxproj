@@ -187,24 +187,26 @@
     <ClCompile Include="Utility\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="DirectX11Engine.h" />
-    <ClInclude Include="externs.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Math\CMatrix4x4.h" />
-    <ClInclude Include="Math\CVector2.h" />
-    <ClInclude Include="Math\CVector3.h" />
-    <ClInclude Include="Math\MathHelpers.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Utility\ColourRGBA.h" />
-    <ClInclude Include="Utility\Input.h" />
-    <ClInclude Include="Utility\GraphicsHelpers.h" />
-    <ClInclude Include="Utility\Timer.h" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="Common.hpp" />
+    <ClInclude Include="ICamera.hpp" />
+    <ClInclude Include="IEngine.hpp" />
+    <ClInclude Include="Scene.hpp" />
+    <ClInclude Include="DirectX11Engine.hpp" />
+    <ClInclude Include="externs.hpp" />
+    <ClInclude Include="Light.hpp" />
+    <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="Math\CMatrix4x4.hpp" />
+    <ClInclude Include="Math\CVector2.hpp" />
+    <ClInclude Include="Math\CVector3.hpp" />
+    <ClInclude Include="Math\MathHelpers.hpp" />
+    <ClInclude Include="Model.hpp" />
+    <ClInclude Include="SceneManager.hpp" />
+    <ClInclude Include="Shader.hpp" />
+    <ClInclude Include="Utility\ColourRGBA.hpp" />
+    <ClInclude Include="Utility\Input.hpp" />
+    <ClInclude Include="Utility\GraphicsHelpers.hpp" />
+    <ClInclude Include="Utility\Timer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common.hlsli" />

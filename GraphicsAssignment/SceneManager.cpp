@@ -1,6 +1,6 @@
-#include "SceneManager.h"
+#include "SceneManager.hpp"
 
-CSceneManager::CSceneManager(CDX11Engine* engine)
+CSceneManager::CSceneManager(IEngine * engine)
 {
 	myEngine = engine;
 

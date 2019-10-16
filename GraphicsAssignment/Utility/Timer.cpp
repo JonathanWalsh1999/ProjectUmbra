@@ -3,7 +3,7 @@
 //--------------------------------------------------------------------------------------
 
 #include "Windows.h"
-#include "Timer.h"
+#include "Timer.hpp"
 
 // Constructor //
 

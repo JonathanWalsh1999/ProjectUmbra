@@ -3,12 +3,12 @@
 // Creation of constant buffers to help send C++ values to shaders each frame
 //--------------------------------------------------------------------------------------
 
-#include "Shader.h"
+#include "Shader.hpp"
 #include <fstream>
 #include <vector>
 #include <d3dcompiler.h>
 
-#include "DirectX11Engine.h"
+#include "DirectX11Engine.hpp"
 
 //--------------------------------------------------------------------------------------
 // Global Variables
@@ -59,7 +59,7 @@ void ReleaseShaders()
 
 // Load a vertex shader, include the file in the project and pass the name (without the .hlsl extension)
 // to this function. The returned pointer needs to be released before quitting. Returns nullptr on failure. 
-ID3D11VertexShader* LoadVertexShader(std::string shaderName, CDX11Engine* engine)
+ID3D11VertexShader* LoadVertexShader(std::string shaderName, IEngine * engine)
 {
 	// Open compiled shader object file
 	std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
@@ -93,7 +93,7 @@ ID3D11VertexShader* LoadVertexShader(std::string shaderName, CDX11Engine* engine
 // Load a pixel shader, include the file in the project and pass the name (without the .hlsl extension)
 // to this function. The returned pointer needs to be released before quitting. Returns nullptr on failure. 
 // Basically the same code as above but for pixel shaders
-ID3D11PixelShader* LoadPixelShader(std::string shaderName, CDX11Engine* engine)
+ID3D11PixelShader* LoadPixelShader(std::string shaderName, IEngine * engine)
 {
 	// Open compiled shader object file
 	std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
@@ -179,7 +179,7 @@ ID3DBlob* CreateSignatureForVertexLayout(const D3D11_INPUT_ELEMENT_DESC vertexLa
 
 // Create and return a constant buffer of the given size
 // The returned pointer needs to be released before quitting. Returns nullptr on failure. 
-ID3D11Buffer* CreateConstantBuffer(int size, CDX11Engine* engine)
+ID3D11Buffer* CreateConstantBuffer(int size, IEngine * engine)
 {
 	D3D11_BUFFER_DESC cbDesc;
 	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

@@ -1,9 +1,9 @@
-#include "Scene.h"
-#include "DirectX11Engine.h"
-#include "Light.h"
-#include "Model.h"
+#include "Scene.hpp"
+#include "DirectX11Engine.hpp"
+#include "Light.hpp"
+#include "Model.hpp"
 
-CScene::CScene(CDX11Engine* engine)
+CScene::CScene(IEngine * engine)
 {
 	mEngine = engine;
 }
@@ -36,13 +36,13 @@ bool CScene::InitGeometry()
 		return false;
 	}
 
-	mPerFrameConstants = mEngine->GetFrameConstants();
+
 	mPerModelConstants = mEngine->GetModelConstants();
 
 	// Create GPU-side constant buffers to receive the gPerFrameConstants and gPerModelConstants structures above
 	// These allow us to pass data from CPU to shaders such as lighting information or matrices
 	// See the comments above where these variable are declared and also the UpdateScene function
-	mPerFrameConstantBuffer = CreateConstantBuffer(sizeof(mEngine->GetFrameConstants()), mEngine);
+	mPerFrameConstantBuffer = CreateConstantBuffer(sizeof(mPerFrameConstants), mEngine);
 	mPerModelConstantBuffer = CreateConstantBuffer(sizeof(mPerModelConstants), mEngine);
 	if (mPerFrameConstantBuffer == nullptr || mPerModelConstantBuffer == nullptr)
 	{
@@ -50,7 +50,7 @@ bool CScene::InitGeometry()
 		return false;
 	}
 
-	mEngine->SetFrameConstants(mPerFrameConstants);
+
 	mEngine->SetModelConstants(mPerModelConstants);
 
 	//// Load / prepare textures on the GPU ////
@@ -92,7 +92,7 @@ bool CScene::InitScene()
 
 	//// Set up cameras ////
 
-	camera = new Camera();
+	camera = new CCamera();
 	camera->SetPosition({ 0, 50, -100 });
 	camera->SetRotation({ ToRadians(30.0f), 0.0f, 0.0f });
 	camera->SetNearClip(5);
@@ -101,9 +101,9 @@ bool CScene::InitScene()
 	return true;
 }
 
-void CScene::RenderSceneFromCamera(Camera* cam)
+void CScene::RenderSceneFromCamera(ICamera * cam)
 {
-	mPerFrameConstants = mEngine->GetFrameConstants();
+
 	mPerModelConstants = mEngine->GetModelConstants();
 
 	// Set camera matrices in the constant buffer and send over to GPU
@@ -111,8 +111,8 @@ void CScene::RenderSceneFromCamera(Camera* cam)
 	mPerFrameConstants.viewMatrix = cam->ViewMatrix(); 
 	mPerFrameConstants.projectionMatrix = cam->ProjectionMatrix();
 	mPerFrameConstants.viewProjectionMatrix = cam->ViewProjectionMatrix();
-	mEngine->SetFrameConstants(mPerFrameConstants);
-	mEngine->UpdateConstantBuffer(mEngine->GetFrameConstantBuffer(), mEngine->GetFrameConstants());
+
+	mEngine->UpdateConstantBuffer(mEngine->GetFrameConstantBuffer(), mPerFrameConstants);
 
 	mPerFrameConstantBuffer = mEngine->GetFrameConstantBuffer();
 
@@ -144,7 +144,7 @@ void CScene::RenderSceneFromCamera(Camera* cam)
 }
 void CScene::RenderScene(float& frameTime)
 {
-	mPerFrameConstants = mEngine->GetFrameConstants();
+
 	D3D11_VIEWPORT vp;
 	allModels = mEngine->GetAllModels();
 	allModels = Model::GetAllObjects();
@@ -166,7 +166,7 @@ void CScene::RenderScene(float& frameTime)
 	//gPerFrameConstants.ambientColour = gAmbientColour;
 	//gPerFrameConstants.specularPower = gSpecularPower;
 	mPerFrameConstants.cameraPosition = camera->Position();
-	mEngine->SetFrameConstants(mPerFrameConstants);
+
 	//// Main scene rendering ////
 
 	// Now set the back buffer as the target for rendering and select the main depth buffer.
@@ -395,14 +395,14 @@ bool CScene::ShadowDepthBuffer()
 }
 void CScene::RenderDepthBufferFromLight(int lightIndex)
 {
-	mPerFrameConstants = mEngine->GetFrameConstants();
+
 
 	// Get camera-like matrices from the spotlight, seet in the constant buffer and send over to GPU
 	mPerFrameConstants.viewMatrix = InverseAffine(mEngine->GetAllLights()[lightIndex]->lightModel->WorldMatrix());
 	mPerFrameConstants.projectionMatrix = mEngine->MakeProjectionMatrix(1.0f, ToRadians(90.0f)); // Helper function in Utility\GraphicsHelpers.cpp
 	mPerFrameConstants.viewProjectionMatrix = mPerFrameConstants.viewMatrix * mPerFrameConstants.projectionMatrix;
 
-	mEngine->SetFrameConstants(mPerFrameConstants);
+
 	mEngine->UpdateConstantBuffer(mPerFrameConstantBuffer, mPerFrameConstants);
 
 	// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
@@ -472,7 +472,12 @@ PerModelConstants CScene::GetModelConstants()
 	return mPerModelConstants;
 }
 
-Camera* CScene::GetCamera()
+ICamera* CScene::GetCamera()
 {
 	return camera;
+}
+
+void CScene::SetFrameConstants(PerFrameConstants& constants)
+{
+	mPerFrameConstants = constants;
 }

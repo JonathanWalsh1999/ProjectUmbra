@@ -52,58 +52,64 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utility\ColourRGBA.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="Camera.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\Input.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="Common.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\Timer.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="DirectX11Engine.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Math\CMatrix4x4.h">
-      <Filter>Maths</Filter>
+    <ClInclude Include="externs.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Math\CVector2.h">
-      <Filter>Maths</Filter>
+    <ClInclude Include="Light.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Math\CVector3.h">
-      <Filter>Maths</Filter>
+    <ClInclude Include="Mesh.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Math\MathHelpers.h">
-      <Filter>Maths</Filter>
+    <ClInclude Include="Model.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\GraphicsHelpers.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="Scene.hpp">
+      <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
+    <ClInclude Include="Shader.hpp">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.hpp">
       <Filter>SceneFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Utility\ColourRGBA.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GraphicsHelpers.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Input.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Timer.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CMatrix4x4.hpp">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CVector2.hpp">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\CVector3.hpp">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathHelpers.hpp">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="ICamera.hpp">
       <Filter>EngineFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectX11Engine.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="externs.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="IEngine.hpp">
       <Filter>EngineFiles</Filter>
     </ClInclude>
   </ItemGroup>

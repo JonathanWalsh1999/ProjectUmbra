@@ -4,20 +4,29 @@
 // Holds a pointer to a mesh as well as position, rotation and scaling, which are converted to a world matrix when required
 // This is more of a convenience class, the Mesh class does most of the difficult work.
 
-#include "Model.h"
+#include "Model.hpp"
 
 
 
-#include "Mesh.h"
+#include "Mesh.hpp"
 
-#include "DirectX11Engine.h"
-#include "GraphicsHelpers.h"
+#include "DirectX11Engine.hpp"
+#include "GraphicsHelpers.hpp"
 
 
 std::vector<Model*> Model::objectList;
 std::vector<std::string> Model::mMediaFolders;
 
-
+Model::Model(Mesh* mesh, IEngine * engine = nullptr, CVector3 position /*= { 0,0,0 }*/, CVector3 rotation /*= { 0,0,0 }*/, float scale /*= 1*/)
+	: mMesh(mesh), mPosition(position), mRotation(rotation), mScale({ scale, scale, scale })
+{
+	addBlending = false;
+	blend = None;
+	objectList.push_back(this);
+	myEngine = engine;
+	myScene = myEngine->GetScene();
+	mPerFrameConstants = myScene->GetFrameConstants();
+}
 
 std::vector<Model*> Model::GetAllObjects()
 {
@@ -43,7 +52,7 @@ void Model::LookAt(Model* target)
 	lookingAt = true;
 }
 
-void Model::LookAtCamera(Camera* target)
+void Model::LookAtCamera(ICamera * target)
 {
 	CVector3 yAxis = { 0.0f, 1.0f, 0.0f };
 	CVector3 vecZ = Normalise(target->Position() - Position());
@@ -85,7 +94,7 @@ std::string Model::GetTextureFile()
 void Model::Render()
 {
 	mPerModelConstants = myEngine->GetModelConstants();
-	mPerFrameConstants = myEngine->GetFrameConstants();
+	mPerFrameConstants = myScene->GetFrameConstants();
 
 	if (!lookingAt)
 	{
@@ -149,14 +158,14 @@ void Model::SetSkin(const std::string& colour)
 		{
 			if (directory)
 			{
-				if (!myEngine->LoadTexture(mediaFolders[i] + slash + colour, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+				if (!myEngine->LoadTexture(mediaFolders[i] + slash + colour, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 				{
 					//gLastError = "Error loading textures";
 				}
 			}
 			else
 			{
-				if (!myEngine->LoadTexture(mediaFolders[i] + slash + colour, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+				if (!myEngine->LoadTexture(mediaFolders[i] + slash + colour, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 				{
 					//gLastError = "Error loading textures";
 				}
@@ -170,7 +179,7 @@ void Model::SetSkin(const std::string& colour)
 
 	if (newMesh == nullptr)
 	{
-		if (!myEngine->LoadTexture(colour, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+		if (!myEngine->LoadTexture(colour, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 		{
 			//gLastError = "Error loading textures";
 		}
@@ -437,7 +446,7 @@ void Model::AddSecondaryTexture(const std::string& texture2)
 		//{
 		if (directory)
 		{
-			if (!myEngine->LoadTexture(mMediaFolders[i] + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV, myEngine))
+			if (!myEngine->LoadTexture(mMediaFolders[i] + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV))
 			{
 				//gLastError = "Error loading textures";
 			}
@@ -445,7 +454,7 @@ void Model::AddSecondaryTexture(const std::string& texture2)
 		}
 		else
 		{
-			if (!myEngine->LoadTexture(mMediaFolders[i] + slash + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV, myEngine))
+			if (!myEngine->LoadTexture(mMediaFolders[i] + slash + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV))
 			{
 				//gLastError = "Error loading textures";
 			}
@@ -458,7 +467,7 @@ void Model::AddSecondaryTexture(const std::string& texture2)
 	}
 	if (diffuseSpecular2Map == nullptr)
 	{
-		if (!myEngine->LoadTexture(texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV, myEngine))
+		if (!myEngine->LoadTexture(texture2File, &diffuseSpecular2Map, &diffuseSpecularMap2SRV))
 		{
 			//gLastError = "Error loading textures";
 		}

@@ -7,10 +7,10 @@
 // The class also doesn't load textures, filters or shaders as the outer code is
 // expected to select these things. A later lab will introduce a more robust loader.
 
-#include "Mesh.h"
-#include "Shader.h" // Needed for helper function CreateSignatureForVertexLayout
-#include "CVector2.h" 
-#include "CVector3.h" 
+#include "Mesh.hpp"
+#include "Shader.hpp" // Needed for helper function CreateSignatureForVertexLayout
+#include "CVector2.hpp" 
+#include "CVector3.hpp" 
 
 #include <assimp/Importer.hpp>
 #include <assimp/DefaultLogger.hpp>
@@ -19,7 +19,7 @@
 
 #include <memory>
 
-#include "DirectX11Engine.h"
+#include "DirectX11Engine.hpp"
 
 
 
@@ -29,7 +29,7 @@ std::vector<std::string> Mesh::mMediaFolders;
 // Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
 // Optionally request tangents to be calculated (for normal and parallax mapping - see later lab)
 // Will throw a std::runtime_error exception on failure (since constructors can't return errors).
-Mesh::Mesh(const std::string& fileName, CDX11Engine* engine /*= nullptr*/, bool requireTangents /*= false*/)
+Mesh::Mesh(const std::string& fileName, IEngine * engine = nullptr, bool requireTangents /*= false*/)
 {
 	myEngine = engine;
 
@@ -297,7 +297,7 @@ Model* Mesh::CreateModel(const std::string& textureFile , const float x, const f
 		//{
 		if (directory)
 		{
-			if (!myEngine->LoadTexture(mMediaFolders[i] + textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+			if (!myEngine->LoadTexture(mMediaFolders[i] + textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 			{
 				//gLastError = "Error loading textures";
 			}
@@ -305,7 +305,7 @@ Model* Mesh::CreateModel(const std::string& textureFile , const float x, const f
 		}
 		else
 		{
-			if (!myEngine->LoadTexture(mMediaFolders[i] + slash + textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+			if (!myEngine->LoadTexture(mMediaFolders[i] + slash + textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 			{
 				//gLastError = "Error loading textures";
 			}
@@ -318,7 +318,7 @@ Model* Mesh::CreateModel(const std::string& textureFile , const float x, const f
 	}
 	if (diffuseSpecularMap == nullptr)
 	{
-		if (!myEngine->LoadTexture(textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV, myEngine))
+		if (!myEngine->LoadTexture(textureFile, &diffuseSpecularMap, &diffuseSpecularMapSRV))
 		{
 			//gLastError = "Error loading textures";
 		}

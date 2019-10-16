@@ -1,8 +1,9 @@
-#include "Light.h"
-#include "DirectX11Engine.h"
-#include "GraphicsHelpers.h"
+#include "Light.hpp"
+#include "DirectX11Engine.hpp"
+#include "GraphicsHelpers.hpp"
+#include "Scene.hpp"
 
-#include "Model.h"
+#include "Model.hpp"
 
 
 std::vector<CVector3> Light::lightPositions;
@@ -10,12 +11,14 @@ std::vector<CVector3> Light::lightColours;
 std::vector<float> Light::lightStrengths;
 
 
-Light::Light(CDX11Engine* engine)
+Light::Light(IEngine * engine)
 { 
 	myEngine = engine;
 
 	mPSShader = LoadPixelShader("DepthOnly_ps", myEngine);
 	mVSShader = LoadVertexShader("BasicTransform_vs", myEngine);
+	myScene = myEngine->GetScene();
+	mPerFrameConstants = myScene->GetFrameConstants();
 }
 Light::~Light() {}
 
@@ -40,7 +43,7 @@ void Light::SetLightNumber(const int& newLightNumber) { mLightNumber = newLightN
 
 void Light::RenderLight()
 {
-	mPerFrameConstants = myEngine->GetFrameConstants();
+	mPerFrameConstants = myScene->GetFrameConstants();
 	mPerModelConstants = myEngine->GetModelConstants();
 	if (mLightNumber == 1)
 	{
@@ -55,7 +58,7 @@ void Light::RenderLight()
 		mPerFrameConstants.lightColours[0] = mLightColour * mLightStrength;
 		mPerFrameConstants.lightPositions[0] = mLightPosition;
 
-		myEngine->SetFrameConstants(mPerFrameConstants);
+		myScene->SetFrameConstants(mPerFrameConstants);
 
 		//View matrix for spotlight
 		CMatrix4x4 lightViewMatrix = InverseAffine(this->lightModel->WorldMatrix());
@@ -67,14 +70,14 @@ void Light::RenderLight()
 		mPerFrameConstants.lightViewMatrix = lightViewMatrix;
 		mPerFrameConstants.lightProjectionMatrix = lightProjectionMatrix;
 
-		myEngine->SetFrameConstants(mPerFrameConstants);
+		myScene->SetFrameConstants(mPerFrameConstants);
 	}
 
 	mPerModelConstants.objectColour = mLightColour;
 	myEngine->SetModelConstants(mPerModelConstants);
 	mPerFrameConstants.ambientColour = mAmbientColour;
 	mPerFrameConstants.specularPower = mSpecularPower;
-	myEngine->SetFrameConstants(mPerFrameConstants);
+	myScene->SetFrameConstants(mPerFrameConstants);
 }
 
 // Render the scene from the given light's point of view. Only renders depth buffer
@@ -89,8 +92,8 @@ void Light::RenderDepthBufferFromLight(std::vector<Model*> allShadowModels)
 	mPerFrameConstants.viewMatrix = InverseAffine(this->lightModel->WorldMatrix());
 	mPerFrameConstants.projectionMatrix = myEngine->MakeProjectionMatrix(1.0f, ToRadians(coneAngle));
 	mPerFrameConstants.viewProjectionMatrix = myEngine->GetFrameConstants().viewMatrix * myEngine->GetFrameConstants().projectionMatrix;
-	myEngine->SetFrameConstants(mPerFrameConstants);
-	myEngine->UpdateConstantBuffer(myEngine->GetFrameConstantBuffer(), myEngine->GetFrameConstants());
+	myScene->SetFrameConstants(mPerFrameConstants);
+	myEngine->UpdateConstantBuffer(myEngine->GetFrameConstantBuffer(), mPerFrameConstants);
 
 
 	// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)

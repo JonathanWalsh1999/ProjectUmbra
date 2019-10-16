@@ -3,10 +3,10 @@
 //--------------------------------------------------------------------------------------
 // Holds position, rotation, near/far clip and field of view. These to a view and projection matrices as required
 
-#include "Camera.h"
-#include "Common.h"
+#include "Camera.hpp"
+#include "Common.hpp"
 // Control the camera's position and rotation using keys provided
-void Camera::Control(float frameTime, KeyCode turnUp, KeyCode turnDown, KeyCode turnLeft, KeyCode turnRight,
+void CCamera::Control(float frameTime, KeyCode turnUp, KeyCode turnDown, KeyCode turnLeft, KeyCode turnRight,
                                       KeyCode moveForward, KeyCode moveBackward, KeyCode moveLeft, KeyCode moveRight)
 {
 	//**** ROTATION ****
@@ -56,7 +56,7 @@ void Camera::Control(float frameTime, KeyCode turnUp, KeyCode turnDown, KeyCode 
 
 
 // Update the matrices used for the camera in the rendering pipeline
-void Camera::UpdateMatrices()
+void CCamera::UpdateMatrices()
 {
     // "World" matrix for the camera - treat it like a model at first
     mWorldMatrix = MatrixRotationZ(mRotation.z) * MatrixRotationX(mRotation.x) * MatrixRotationY(mRotation.y) * MatrixTranslation(mPosition);
