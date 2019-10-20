@@ -4,25 +4,24 @@
 // Holds a pointer to a mesh as well as position, rotation and scaling, which are converted to a world matrix when required
 // This is more of a convenience class, the Mesh class does most of the difficult work.
 
-#include "Common.hpp"
-#include "CVector3.hpp"
-#include "CMatrix4x4.hpp"
-#include "Input.hpp"
-#include "Camera.hpp"
+
+
 
 #ifndef _MODEL_H_INCLUDED_
 #define _MODEL_H_INCLUDED_
 
-class Mesh;
-class IEngine;
-class CScene;
+#include "IModel.hpp"
 
-class Model
+class IMesh;
+class IEngine;
+class IScene;
+
+class Model : public IModel
 {
 public:
 
 						
-	Model(Mesh* mesh, IEngine * engine, CVector3 position = { 0,0,0 }, CVector3 rotation = { 0,0,0 }, float scale = 1);
+	Model(IMesh* mesh, IEngine * engine, CVector3 position = { 0,0,0 }, CVector3 rotation = { 0,0,0 }, float scale = 1);
 
     // The render function sets the world matrix in the per-frame constant buffer and makes that buffer available
     // to vertex & pixel shader. Then it calls Mesh:Render, which renders the geometry with current GPU settings.
@@ -59,7 +58,7 @@ public:
 	// Read only access to model world matrix, updated on request
 	CMatrix4x4 WorldMatrix()  { UpdateWorldMatrix();  return mWorldMatrix; }
 
-	void LookAt(Model* target);
+	void LookAt(IModel* target);
 	void LookAtCamera(ICamera * target);
 
 	void MoveLocalX(float speed);
@@ -107,7 +106,7 @@ public:
 
 
 	//HOLD ALL OBJECTS IN THIS CLASS
-	static std::vector<Model*> GetAllObjects();
+	static std::vector<IModel*> GetAllObjects();
 
 
 	
@@ -116,9 +115,9 @@ public:
 	//-------------------------------------
 private:
 	IEngine * myEngine;
-	CScene* myScene;
+	IScene* myScene;
 
-	static std::vector<Model*> objectList;
+	static std::vector<IModel*> objectList;
 
 	bool addBlending;
 
@@ -147,7 +146,7 @@ private:
 
 	bool lookingAt = false;
 
-    Mesh* mMesh = nullptr;
+	IMesh* mMesh = nullptr;
 	static std::vector<std::string> mMediaFolders;
 
 	// Position, rotation and scaling for the model

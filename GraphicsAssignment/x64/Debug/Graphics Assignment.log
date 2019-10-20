@@ -1,6 +1,14 @@
-﻿  Light.cpp
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\light.cpp(30): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-  Model.cpp
+﻿  DirectX11Engine.cpp
+  GraphicsMain.cpp
+  Light.cpp
+f:\fastuniversity\project - double\projectumbra\graphicsassignment\light.cpp(29): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+  MAINGame.cpp
+f:\fastuniversity\project - double\projectumbra\graphicsassignment\maingame.cpp(7): warning C4326: return type of 'main' should be 'int' instead of 'void'
   Mesh.cpp
+  Model.cpp
+  Scene.cpp
+  SceneManager.cpp
+  Shader.cpp
+  extern.cpp
   Generating Code...
   Graphics Assignment.vcxproj -> F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\\Graphics Assignment.exe

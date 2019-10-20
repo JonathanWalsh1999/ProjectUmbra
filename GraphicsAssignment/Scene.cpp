@@ -288,7 +288,7 @@ void CScene::RenderModels()
 
 	}
 }
-void CScene::RenderLights(std::vector<Light*> lights)
+void CScene::RenderLights(std::vector<ILight*> lights)
 {
 	mLights = lights;
 	mEngine->SetAllLights(mLights);
@@ -398,7 +398,7 @@ void CScene::RenderDepthBufferFromLight(int lightIndex)
 
 
 	// Get camera-like matrices from the spotlight, seet in the constant buffer and send over to GPU
-	mPerFrameConstants.viewMatrix = InverseAffine(mEngine->GetAllLights()[lightIndex]->lightModel->WorldMatrix());
+	mPerFrameConstants.viewMatrix = InverseAffine(mEngine->GetAllLights()[lightIndex]->GetModel()->WorldMatrix());
 	mPerFrameConstants.projectionMatrix = mEngine->MakeProjectionMatrix(1.0f, ToRadians(90.0f)); // Helper function in Utility\GraphicsHelpers.cpp
 	mPerFrameConstants.viewProjectionMatrix = mPerFrameConstants.viewMatrix * mPerFrameConstants.projectionMatrix;
 

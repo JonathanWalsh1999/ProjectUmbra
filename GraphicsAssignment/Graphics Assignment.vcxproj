@@ -191,6 +191,10 @@
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="ICamera.hpp" />
     <ClInclude Include="IEngine.hpp" />
+    <ClInclude Include="ILight.hpp" />
+    <ClInclude Include="IMesh.hpp" />
+    <ClInclude Include="IModel.hpp" />
+    <ClInclude Include="IScene.hpp" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="DirectX11Engine.hpp" />
     <ClInclude Include="externs.hpp" />

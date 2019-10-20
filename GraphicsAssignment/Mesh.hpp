@@ -7,18 +7,17 @@
 // The class also doesn't load textures, filters or shaders as the outer code is
 // expected to select these things. A later lab will introduce a more robust loader.
 
-#include "common.hpp"
-#include "externs.hpp"
 
-#include <string>
 
 #ifndef _MESH_H_INCLUDED_
 #define _MESH_H_INCLUDED_
 
-class Model;
+#include "IMesh.hpp"
+
+class IModel;
 class IEngine;
 
-class Mesh
+class Mesh : public IMesh
 {
 public:
 	// Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
@@ -26,7 +25,7 @@ public:
 	// Will throw a std::runtime_error exception on failure (since constructors can't return errors).
 	Mesh(const std::string& fileName, IEngine * engine, bool requireTangents = false);
 
-	Model* CreateModel(const std::string& textureFile = "brick1.jpg", const float x = 0, const float y = 0, const float z = 0,
+	IModel* CreateModel(const std::string& textureFile = "brick1.jpg", const float x = 0, const float y = 0, const float z = 0,
 		const std::string& psShaderFile = "PixelLighting_ps", const std::string vsShaderFile = "PixelLighting_vs");
 	~Mesh();
 

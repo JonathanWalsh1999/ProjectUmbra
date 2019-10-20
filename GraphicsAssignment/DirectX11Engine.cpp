@@ -141,9 +141,9 @@ std::vector<ID3D11ShaderResourceView*> CDX11Engine::GetSRVMaps()
 	return diffuseSpecularMapSRVs;
 }
 
-Mesh* CDX11Engine::LoadMesh(const std::string& modelFile)
+IMesh* CDX11Engine::LoadMesh(const std::string& modelFile)
 {	
-	Mesh* newMesh = nullptr;
+	IMesh* newMesh = nullptr;
 
 	//Checks for whether the file is inside a folder
 	bool directory = false;
@@ -598,7 +598,7 @@ void CDX11Engine::ReleaseStates()
 	if (mPointSampler)           mPointSampler->Release();
 }
 
-Light* CDX11Engine::CreateLight()
+ILight* CDX11Engine::CreateLight()
 {	
 	return new Light(this);
 }
@@ -749,11 +749,11 @@ HWND CDX11Engine::GetHWnd()
 	return mHWnd;
 }
 
-std::vector<Model*> CDX11Engine::GetAllModels()
+std::vector<IModel*> CDX11Engine::GetAllModels()
 {
 	return allModels;
 }
-std::vector<Light*> CDX11Engine::GetAllLights()
+std::vector<ILight*> CDX11Engine::GetAllLights()
 {
 	return mLight;
 }
@@ -766,7 +766,7 @@ std::vector<ID3D11ShaderResourceView*> CDX11Engine::GetDiffuseSpecularMapSRVs()
 {
 	return diffuseSpecularMapSRVs;
 }
-CScene* CDX11Engine::GetScene()
+IScene* CDX11Engine::GetScene()
 {
 	return myScene;
 }
@@ -781,15 +781,15 @@ void CDX11Engine::SetModelConstants(PerModelConstants& constants)
 	mPerModelConstants = constants;
 }
 
-void CDX11Engine::SetAllModels(std::vector<Model*>& models)
+void CDX11Engine::SetAllModels(std::vector<IModel*>& models)
 {
 	allModels = models;
 }
-void CDX11Engine::SetAllLights(std::vector<Light*>& lights)
+void CDX11Engine::SetAllLights(std::vector<ILight*>& lights)
 {
 	mLight = lights;
 }
-void CDX11Engine::SetScene(CScene* scene)
+void CDX11Engine::SetScene(IScene* scene)
 {
 	myScene = scene;
 }

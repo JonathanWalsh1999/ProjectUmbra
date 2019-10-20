@@ -129,7 +129,7 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
     float4x4 lightViewMatrix;
     float4x4 lightProjectionMatrix;
 
-
+    
     float4 lightPositions[lightAmount];
     //float padding7[lightAmount];
     float4 lightColours[lightAmount];

@@ -1,16 +1,10 @@
 #pragma once
 
-#include <vector>
+#include "IScene.hpp"
 
-#include "Shader.hpp"
-#include "Camera.hpp"
-#include "ColourRGBA.hpp"
-#include "DirectX11Engine.hpp"
-
-class Light;
 class Model;
 
-class CScene
+class CScene : public IScene
 {
 public:
 	CScene(IEngine * engine);
@@ -23,7 +17,7 @@ public:
 	void RenderSceneFromCamera(ICamera * cam);
 	void RenderScene(float& frameTime);
 	void RenderModels();
-	void RenderLights(std::vector<Light*> lights);
+	void RenderLights(std::vector<ILight*> lights);
 	void RenderShadow(D3D11_VIEWPORT& vp);
 
 	void UpdateScene(float frameTime);
@@ -66,8 +60,8 @@ private:
 
 
 
-	std::vector<Model*> allModels;
-	std::vector<Light*> mLights;
+	std::vector<IModel*> allModels;
+	std::vector<ILight*> mLights;
 
 	ID3D11RenderTargetView* mBackBufferRenderTarget;
 	ColourRGBA mBackgroundColour;

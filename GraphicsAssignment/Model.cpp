@@ -14,10 +14,10 @@
 #include "GraphicsHelpers.hpp"
 
 
-std::vector<Model*> Model::objectList;
+std::vector<IModel*> Model::objectList;
 std::vector<std::string> Model::mMediaFolders;
 
-Model::Model(Mesh* mesh, IEngine * engine = nullptr, CVector3 position /*= { 0,0,0 }*/, CVector3 rotation /*= { 0,0,0 }*/, float scale /*= 1*/)
+Model::Model(IMesh* mesh, IEngine * engine = nullptr, CVector3 position /*= { 0,0,0 }*/, CVector3 rotation /*= { 0,0,0 }*/, float scale /*= 1*/)
 	: mMesh(mesh), mPosition(position), mRotation(rotation), mScale({ scale, scale, scale })
 {
 	addBlending = false;
@@ -28,12 +28,12 @@ Model::Model(Mesh* mesh, IEngine * engine = nullptr, CVector3 position /*= { 0,0
 	mPerFrameConstants = myScene->GetFrameConstants();
 }
 
-std::vector<Model*> Model::GetAllObjects()
+std::vector<IModel*> Model::GetAllObjects()
 {
 	return objectList;
 }
 
-void Model::LookAt(Model* target)
+void Model::LookAt(IModel* target)
 {	
 	CVector3 yAxis = { 0.0f, 1.0f, 0.0f };
 	CVector3 vecZ = Normalise(target->Position() - Position());
@@ -137,7 +137,7 @@ void Model::SetSkin(const std::string& colour)
 	std::vector<std::string> mediaFolders = myEngine->GetMediaFolders();
 	//ID3D11ShaderResourceView* diffuseSpecularMapSRV = nullptr;
 	//ID3D11Resource* diffuseSpecularMap = nullptr;
-	Mesh* newMesh = nullptr;
+	IMesh* newMesh = nullptr;
 	//allModels = newMesh->GetAllModels();
 	bool directory = false;
 	const char slash = '\\';

@@ -48,7 +48,7 @@ public:
 	// Release the memory held by all objects created
 	virtual void ShutdownDirect3D() = 0;
 
-	virtual Mesh* LoadMesh(const std::string& file) = 0;//Load Meshes from file
+	virtual IMesh* LoadMesh(const std::string& file) = 0;//Load Meshes from file
 
 	//Major engine methods
 
@@ -69,7 +69,7 @@ public:
 	// State creation / destruction
 	//--------------------------------------------------------------------------------------
 
-	virtual Light* CreateLight() = 0;
+	virtual ILight* CreateLight() = 0;
 	// Create all the states used in this app, returns true on success
 	virtual bool CreateStates() = 0;
 
@@ -141,22 +141,22 @@ public:
 	virtual ID3D11DepthStencilState* GetDepthReadOnlyState() = 0;
 	virtual HWND GetHWnd() = 0;
 
-	virtual std::vector<Model*> GetAllModels() = 0;
-	virtual std::vector<Light*> GetAllLights() = 0;
+	virtual std::vector<IModel*> GetAllModels() = 0;
+	virtual std::vector<ILight*> GetAllLights() = 0;
 
 	virtual std::vector<ID3D11Resource*> GetDiffuseSpecularMaps() = 0;
 	virtual std::vector<ID3D11ShaderResourceView*> GetDiffuseSpecularMapSRVs() = 0;
 
-	virtual CScene* GetScene() = 0;
+	virtual IScene* GetScene() = 0;
 
 	//Setters
 	virtual void SetFrameConstants(PerFrameConstants& constants) = 0;
 	virtual void SetModelConstants(PerModelConstants& constants) = 0;
 
-	virtual void SetAllModels(std::vector<Model*>& models) = 0;
-	virtual void SetAllLights(std::vector<Light*>& lights) = 0;
+	virtual void SetAllModels(std::vector<IModel*>& models) = 0;
+	virtual void SetAllLights(std::vector<ILight*>& lights) = 0;
 
-	virtual void SetScene(CScene* scene) = 0;
+	virtual void SetScene(IScene* scene) = 0;
 
 
 	ID3D11DeviceContext* mD3DContext;

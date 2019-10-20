@@ -113,12 +113,15 @@ void CSceneManager::SetUpLighting()
 	mLight1->SetSpecularPower(mSpecularPower);
 	mLight1->SetPosition(mLight1Position);
 	mLight1->SetLightAngle(mLight1ConeAngle);
-	mLight1->AddToVector();
-	mLight1->lightMesh = myEngine->LoadMesh(mLightMeshFile);
-	mLight1->lightModel = mLight1->lightMesh->CreateModel(mLightTextureFile, mLight1->GetPosition().x, mLight1->GetPosition().y,
+	//mLight1->AddToVector();
+	mLightMesh = myEngine->LoadMesh(mLightMeshFile);
+	mLight1->SetMesh(mLightMesh);
+	mLightModel1 = mLightMesh->CreateModel(mLightTextureFile, mLight1->GetPosition().x, mLight1->GetPosition().y,
 														mLight1->GetPosition().z, mLightPixelShaderFile, mLightVertexShaderFile);
-	mLight1->lightModel->SetScale(pow(mLight1->GetLightStrength(), mLightModelScale));
-	mLight1->lightModel->SetAddBlend(newBlend);
+
+	mLightModel1->SetScale(pow(mLight1->GetLightStrength(), mLightModelScale));
+	mLightModel1->SetAddBlend(newBlend);
+	mLight1->SetModel(mLightModel1);
 	lights.push_back(mLight1);
 
 	mLight2 = myEngine->CreateLight();
@@ -128,16 +131,17 @@ void CSceneManager::SetUpLighting()
 	mLight2->SetSpecularPower(mSpecularPower);
 	mLight2->SetPosition(mLight2Position);
 
-	mLight2->lightMesh = myEngine->LoadMesh(mLightMeshFile);
-	mLight2->lightModel = mLight2->lightMesh->CreateModel(mLightTextureFile, mLight2->GetPosition().x, mLight2->GetPosition().y,
+
+	mLightModel2 = mLightMesh->CreateModel(mLightTextureFile, mLight2->GetPosition().x, mLight2->GetPosition().y,
 														mLight2->GetPosition().z, mLightPixelShaderFile, mLightVertexShaderFile);
-	mLight2->lightModel->SetAddBlend(newBlend);
-	mLight2->lightModel->SetScale(pow(mLight2->GetLightStrength(), mLightModelScale));
-	mLight2->AddToVector();
+	mLightModel2->SetAddBlend(newBlend);
+	mLightModel2->SetScale(pow(mLight2->GetLightStrength(), mLightModelScale));
+	mLight2->SetModel(mLightModel2);
+	//mLight2->AddToVector();
 	lights.push_back(mLight2);
 }
 
-void CSceneManager::PulsateLight(Light* chosenLight, const float& lightStrength)
+void CSceneManager::PulsateLight(ILight* chosenLight, const float& lightStrength)
 {
 	static float pulsator = lightStrength;
 	static bool fadingIn = false;
@@ -162,7 +166,7 @@ void CSceneManager::PulsateLight(Light* chosenLight, const float& lightStrength)
 	chosenLight->SetLightStrength(pulsator);
 }
 
-void CSceneManager::CycleLightColours(Light* chosenLight)
+void CSceneManager::CycleLightColours(ILight* chosenLight)
 {	
 	struct SBoolCoords{ bool x, y, z; };
 	static CVector3 colourCycle = { 0.0f,0.5f,1.0f };

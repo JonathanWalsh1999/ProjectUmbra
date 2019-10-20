@@ -6,9 +6,6 @@
 #include "Model.hpp"
 
 
-std::vector<CVector3> Light::lightPositions;
-std::vector<CVector3> Light::lightColours;
-std::vector<float> Light::lightStrengths;
 
 
 Light::Light(IEngine * engine)
@@ -22,6 +19,8 @@ Light::Light(IEngine * engine)
 }
 Light::~Light() {}
 
+IMesh* Light::GetMesh() { return lightMesh; }
+IModel* Light::GetModel() { return lightModel; }
 CVector3 Light::GetPosition() { return mLightPosition; }
 CVector3 Light::GetColour() { return mLightColour; }
 float Light::GetSpecularPower() { return mSpecularPower; }
@@ -39,6 +38,8 @@ void Light::SetSpecularPower(const float& newSpecularPower) { mSpecularPower = n
 void Light::SetAmbientColour(const CVector3& newAmbientColour) { mAmbientColour = newAmbientColour; }
 void Light::SetLightStrength(const float& newLightStrength) { mLightStrength = newLightStrength; }
 void Light::SetLightNumber(const int& newLightNumber) { mLightNumber = newLightNumber; }
+void Light::SetMesh(IMesh* newMesh) { lightMesh = newMesh; }
+void Light::SetModel(IModel* newModel) { lightModel = newModel; }
 
 
 void Light::RenderLight()
@@ -81,7 +82,7 @@ void Light::RenderLight()
 }
 
 // Render the scene from the given light's point of view. Only renders depth buffer
-void Light::RenderDepthBufferFromLight(std::vector<Model*> allShadowModels)
+void Light::RenderDepthBufferFromLight(std::vector<IModel*> allShadowModels)
 {
 	//UPDATE ONCE PER FRAME
 	mPerFrameConstants = myEngine->GetFrameConstants();
@@ -117,12 +118,6 @@ void Light::RenderDepthBufferFromLight(std::vector<Model*> allShadowModels)
 }
 
 
-void Light::AddToVector()
-{
-	lightPositions.push_back(mLightPosition);
-	lightColours.push_back(mLightColour);
-	lightStrengths.push_back(mLightStrength);
-}
 
 void Light::SetLightFacing(const CVector3& localZ)
 {

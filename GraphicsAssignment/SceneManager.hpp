@@ -21,9 +21,9 @@ private:
 	void SetUpScene(); 
 	void SetUpLighting();
 
-	void PulsateLight(Light* chosenLight, const float& lightStrength); //Make light brighter and dimmer
+	void PulsateLight(ILight* chosenLight, const float& lightStrength); //Make light brighter and dimmer
 
-	void CycleLightColours(Light* chosenLight); //Change RGB values constantly
+	void CycleLightColours(ILight* chosenLight); //Change RGB values constantly
 	void UpdateColourChannels(float& channelValue, bool& rgbBool);
 
 	void WiggleUpdate();//Change the wiggle variable values up and down depending on frame time.
@@ -35,25 +35,28 @@ private:
 	float mFrameTime;
 	
 	//Meshes created in the scene
-	Mesh* mHillMesh;
-	Mesh* mTeaPotMesh;
-	Mesh* mSphereMesh;
-	Mesh* mCubeMesh;
+	IMesh* mHillMesh;
+	IMesh* mTeaPotMesh;
+	IMesh* mSphereMesh;
+	IMesh* mCubeMesh;
+	IMesh* mLightMesh;
 
 	//Models created in the scene
-	Model* mHill;
-	Model* mTeaPot;
-	Model* mSphere;
-	Model* mCube;
-	Model* mCubeNormal;
-	Model* mCubeParallax;
-	Model* mCubeMultiplicative;
-	Model* mSmoke;
+	IModel* mHill;
+	IModel* mTeaPot;
+	IModel* mSphere;
+	IModel* mCube;
+	IModel* mCubeNormal;
+	IModel* mCubeParallax;
+	IModel* mCubeMultiplicative;
+	IModel* mSmoke;
+	IModel* mLightModel1;
+	IModel* mLightModel2;
 
 	//Create Lights
-	Light* mLight1; //Spotlight
-	Light* mLight2; //Point light
-	std::vector<Light*> lights;
+	ILight* mLight1; //Spotlight
+	ILight* mLight2; //Point light
+	std::vector<ILight*> lights;
 
 	//Light variables
 	float mLight1Strength;
@@ -125,5 +128,5 @@ private:
 	CVector3 mCubeMultiplicativePos{50.0f, 8.0f, 0.0f};
 	CVector3 mSmokePos{40.0f, 28.0f, -20.0f};
 
-	CScene* myScene;
+	IScene* myScene;
 };

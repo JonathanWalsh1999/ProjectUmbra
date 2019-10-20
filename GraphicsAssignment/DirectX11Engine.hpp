@@ -25,7 +25,7 @@ public:
 	// Release the memory held by all objects created
 	void ShutdownDirect3D();	
 
-	Mesh* LoadMesh(const std::string& file);//Load Meshes from file
+	IMesh* LoadMesh(const std::string& file);//Load Meshes from file
 
 	//Major engine methods
 
@@ -46,7 +46,7 @@ public:
 	// State creation / destruction
 	//--------------------------------------------------------------------------------------
 
-	Light* CreateLight();
+	ILight* CreateLight();
 	// Create all the states used in this app, returns true on success
 	bool CreateStates();
 
@@ -110,30 +110,30 @@ public:
 
 	HWND GetHWnd();
 
-	std::vector<Model*> GetAllModels();
-	std::vector<Light*> GetAllLights();
+	std::vector<IModel*> GetAllModels();
+	std::vector<ILight*> GetAllLights();
 
 	std::vector<ID3D11Resource*> GetDiffuseSpecularMaps();
 	std::vector<ID3D11ShaderResourceView*> GetDiffuseSpecularMapSRVs();
 
-	CScene* GetScene();
+	IScene* GetScene();
 
 	//Setters
 	void SetFrameConstants(PerFrameConstants& constants);
 	void SetModelConstants(PerModelConstants& constants);
 
-	void SetAllModels(std::vector<Model*>& models);
-	void SetAllLights(std::vector<Light*>& lights);
+	void SetAllModels(std::vector<IModel*>& models);
+	void SetAllLights(std::vector<ILight*>& lights);
 
-	void SetScene(CScene* scene);
+	void SetScene(IScene* scene);
 
 private:
 
 	//
 	HWND mHWnd;
-	CScene* myScene;
-	std::vector<Light*> mLight;
-	std::vector<Model*> allModels;
+	IScene* myScene;
+	std::vector<ILight*> mLight;
+	std::vector<IModel*> allModels;
 
 	std::vector<ID3D11Resource*> diffuseSpecularMaps;
 	std::vector<ID3D11ShaderResourceView*> diffuseSpecularMapSRVs;
@@ -202,8 +202,8 @@ private:
 	const std::string localMediaFolder = "\\media";
 
 	ICamera* camera;
-	Model* light;
-	Mesh* lightMesh;
+	IModel* light;
+	IMesh* lightMesh;
 
 	//SHADOWS
 	int mShadowMapSize = 256;
@@ -219,7 +219,7 @@ private:
 	std::string mLastError;
 
 
-	std::vector<Mesh*> allMeshes;
+	std::vector<IMesh*> allMeshes;
 
 
 	PerFrameConstants mPerFrameConstants;      // This variable holds the CPU-side constant buffer described above

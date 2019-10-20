@@ -1,23 +1,19 @@
 #pragma once
-#include "Common.hpp"
-#include "Shader.hpp"
+#include "ILight.hpp"
 
-class CScene;
+class IScene;
 class IEngine;
 class Model;
 class Mesh;
 
-class Light
+class Light : public ILight
 {
 public:
 	Light(IEngine * engine);
 	~Light();
-	Model* lightModel;
-	Mesh* lightMesh;
 
-	void AddToVector();
-
-
+	IMesh* GetMesh();
+	IModel* GetModel();
 	CVector3 GetPosition();
 	CVector3 GetColour();
 	float GetSpecularPower();
@@ -33,16 +29,17 @@ public:
 	void SetLightNumber(const int& newLightNumber);
 	void SetLightFacing(const CVector3& localZ);
 	void SetLightAngle(const float& angle);
-	void RenderLight();
-	void RenderDepthBufferFromLight(std::vector<Model*> allShadowModels);
+	void SetMesh(IMesh* newMesh);
+	void SetModel(IModel* newModel);
 
-	static std::vector<CVector3> lightPositions;
-	static std::vector<CVector3> lightColours;
-	static std::vector<float> lightStrengths;
+	void RenderLight();
+	void RenderDepthBufferFromLight(std::vector<IModel*> allShadowModels);
 
 private:
 	IEngine * myEngine;
-	CScene* myScene;
+	IScene* myScene;
+	IModel* lightModel;
+	IMesh* lightMesh;
 
 	CVector3 mLightPosition{ 0,0,0 };
 	CVector3 mLightColour{ 0,0,0 };

@@ -107,10 +107,22 @@
       <Filter>Maths</Filter>
     </ClInclude>
     <ClInclude Include="ICamera.hpp">
-      <Filter>EngineFiles</Filter>
+      <Filter>EngineFiles\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IEngine.hpp">
-      <Filter>EngineFiles</Filter>
+      <Filter>EngineFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.hpp">
+      <Filter>EngineFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IScene.hpp">
+      <Filter>EngineFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IMesh.hpp">
+      <Filter>EngineFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IModel.hpp">
+      <Filter>EngineFiles\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +140,9 @@
     </Filter>
     <Filter Include="SceneFiles">
       <UniqueIdentifier>{c427af6f-596c-45b5-9c85-46fe3de73fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineFiles\Interfaces">
+      <UniqueIdentifier>{a60acb73-13c4-4122-937f-ad1dc4e64c83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

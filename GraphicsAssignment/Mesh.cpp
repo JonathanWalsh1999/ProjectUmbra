@@ -253,12 +253,12 @@ Mesh::~Mesh()
     if (mVertexLayout)  mVertexLayout->Release();
 }
 
-Model* Mesh::CreateModel(const std::string& textureFile , const float x, const float y, const float z, 
+IModel* Mesh::CreateModel(const std::string& textureFile , const float x, const float y, const float z,
 						const std::string& psShaderFile, const std::string vsShaderFile)
 {
 
 
-	Model* newModel;
+	IModel* newModel;
 	//newModel.diffuseSRVMap = nullptr;
 	//newModel.diffuseMap = nullptr;
 	newModel = new Model(this, myEngine);
