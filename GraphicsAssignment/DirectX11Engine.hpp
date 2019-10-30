@@ -83,6 +83,7 @@ public:
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetContext();
+	void SetContext(ID3D11DeviceContext& context);
 
 	ID3D11BlendState* GetNoBlendState();
 	ID3D11BlendState* GetAddBlendState();

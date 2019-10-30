@@ -22,8 +22,6 @@
 #include "DirectX11Engine.hpp"
 
 
-
-
 //std::vector<SModelCreation> Mesh::mModels;
 std::vector<std::string> Mesh::mMediaFolders;
 // Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
@@ -32,6 +30,7 @@ std::vector<std::string> Mesh::mMediaFolders;
 Mesh::Mesh(const std::string& fileName, IEngine * engine = nullptr, bool requireTangents /*= false*/)
 {
 	myEngine = engine;
+	mD3DContext = myEngine->GetContext();
 
 	Assimp::Importer importer;
 
@@ -334,20 +333,23 @@ IModel* Mesh::CreateModel(const std::string& textureFile , const float x, const 
 // It simply draws this mesh with whatever settings the GPU is currently using.
 void Mesh::Render()
 {
+	mD3DContext = myEngine->GetContext();
     // Set vertex buffer as next data source for GPU
     UINT stride = mVertexSize;
     UINT offset = 0;
-    myEngine->GetContext()->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+	mD3DContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
     // Indicate the layout of vertex buffer
-	myEngine->GetContext()->IASetInputLayout(mVertexLayout);
+	mD3DContext->IASetInputLayout(mVertexLayout);
 
     // Set index buffer as next data source for GPU, indicate it uses 32-bit integers
-	myEngine->GetContext()->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	mD3DContext->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
     // Using triangle lists only in this class
-	myEngine->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	mD3DContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // Render mesh
-	myEngine->GetContext()->DrawIndexed(mNumIndices, 0, 0);
+	mD3DContext->DrawIndexed(mNumIndices, 0, 0);
+
+	myEngine->SetContext(*mD3DContext);
 }

@@ -163,17 +163,17 @@ IMesh* CDX11Engine::LoadMesh(const std::string& modelFile)
 		}
 		if (directory)
 		{
-			newMesh = new Mesh(mediaFolders[i] + modelFile, this);
+			newMesh = new Mesh(mediaFolders[i] + modelFile, this, true);
 		}
 		else
 		{
-			newMesh = new Mesh(mediaFolders[i] + slash + modelFile, this);
+			newMesh = new Mesh(mediaFolders[i] + slash + modelFile, this, true);
 		}
 	}
 
 	if (newMesh == nullptr)
 	{
-		newMesh = new Mesh(modelFile, this);
+		newMesh = new Mesh(modelFile, this, true);
 	}
 
 	allMeshes.push_back(newMesh);
@@ -792,5 +792,10 @@ void CDX11Engine::SetAllLights(std::vector<ILight*>& lights)
 void CDX11Engine::SetScene(IScene* scene)
 {
 	myScene = scene;
+}
+
+void CDX11Engine::SetContext(ID3D11DeviceContext& context)
+{
+	mD3DContext = &context;
 }
 

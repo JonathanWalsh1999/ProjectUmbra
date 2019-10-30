@@ -81,9 +81,9 @@ bool CScene::InitGeometry()
 }
 bool CScene::InitScene()
 {
-	mDepthOnly = LoadPixelShader("DepthOnly_ps", mEngine);
+	mDepthOnly = LoadPixelShader("main_ps", mEngine);
 
-	mBasicPixel = LoadVertexShader("BasicTransform_vs", mEngine);
+	mBasicPixel = LoadVertexShader("main_vs", mEngine);
 	//// Set up scene ////
 	//light = new Model(lightMesh);
 
@@ -156,7 +156,26 @@ void CScene::RenderScene(float& frameTime)
 	for (unsigned int i = 0; i < mEngine->GetAllLights().size(); ++i)
 	{
 		mEngine->GetAllLights()[i]->RenderLight();
+
 	}
+
+	vp.Width = static_cast<FLOAT>(mShadowMapSize);
+	vp.Height = static_cast<FLOAT>(mShadowMapSize);
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	mEngine->GetContext()->RSSetViewports(1, &vp);
+
+	// Select the shadow map texture as the current depth buffer. We will not be rendering any pixel colours
+	// Also clear the the shadow map depth buffer to the far distance
+	mEngine->GetContext()->OMSetRenderTargets(0, nullptr, mShadowMapDepthStencil);
+	mEngine->GetContext()->ClearDepthStencilView(mShadowMapDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	//mLight[0]->RenderDepthBufferFromLight(allModels);
+
+	// Render the scene from the point of view of light 1 (only depth values written)
+	//RenderDepthBufferFromLight(0);
+
 	//// Common settings for both main scene and portal scene ////
 
 	// Set up the light information in the constant buffer - this is the same for portal and main render
@@ -180,6 +199,7 @@ void CScene::RenderScene(float& frameTime)
 	mEngine->GetContext()->ClearRenderTargetView(mEngine->GetBackBufferRenderTarget(), &mBackgroundColour.r);
 	mEngine->GetContext()->ClearDepthStencilView(mEngine->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+
 	// Setup the viewport to the size of the main window
 	vp.Width = static_cast<FLOAT>(gViewportWidth);
 	vp.Height = static_cast<FLOAT>(gViewportHeight);
@@ -192,8 +212,9 @@ void CScene::RenderScene(float& frameTime)
 
 	// Render the scene for the main window	
 	RenderModels();
-	RenderShadow(vp);
-	RenderDepthBufferFromLight(0);
+	//RenderShadow(vp);
+	//RenderDepthBufferFromLight(0);
+
 
 	// Set shadow maps in shaders
 	// First parameter is the "slot", must match the Texture2D declaration in the HLSL code
@@ -308,6 +329,9 @@ void CScene::RenderShadow(D3D11_VIEWPORT& vp)
 	mEngine->GetContext()->OMSetRenderTargets(0, nullptr, mShadowMapDepthStencil);
 	mEngine->GetContext()->ClearDepthStencilView(mShadowMapDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	//mLight[0]->RenderDepthBufferFromLight(allModels);
+
+	// Render the scene from the point of view of light 1 (only depth values written)
+	RenderDepthBufferFromLight(0);
 }
 
 void CScene::UpdateScene(float frameTime)

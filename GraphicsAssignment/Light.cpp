@@ -12,8 +12,8 @@ Light::Light(IEngine * engine)
 { 
 	myEngine = engine;
 
-	mPSShader = LoadPixelShader("DepthOnly_ps", myEngine);
-	mVSShader = LoadVertexShader("BasicTransform_vs", myEngine);
+	mPSShader = LoadPixelShader("main_ps", myEngine);
+	mVSShader = LoadVertexShader("main_vs", myEngine);
 	myScene = myEngine->GetScene();
 	mPerFrameConstants = myScene->GetFrameConstants();
 }

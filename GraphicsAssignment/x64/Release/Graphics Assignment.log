@@ -1,0 +1,13 @@
+﻿  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\BasicTransform_vs.cso
+  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_ps.cso
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(31,38-68): warning X3206: implicit truncation of vector type
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(39,23-53): warning X3206: implicit truncation of vector type
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(41,12-56): warning X3206: implicit truncation of vector type
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(47,134-145): warning X3081: comma expression used where a vector constructor may have been intended
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(47,134-152): warning X3081: comma expression used where a vector constructor may have been intended
+  
+  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.cso
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\DepthOnly_ps.hlsl(21,12-45): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\DepthOnly_ps.hlsl(16,36-40): error X4502: Shader model ps_4_0_level_9_3 doesn't allow reading from position semantics.
+  
+  compilation failed; no code produced

@@ -32,7 +32,7 @@ CSceneManager::CSceneManager(IEngine * engine)
 
 		//myEngine->mPerFrameConstants.gParallaxDepth = (parallaxOn ? 0.08f : 0);
 
-		mCubeNormal->Control(mFrameTime, Key_U, Key_J, Key_H, Key_K, Key_0, Key_0, Key_Period, Key_Comma);
+		//mCubeNormal->Control(mFrameTime, Key_U, Key_J, Key_H, Key_K, Key_0, Key_0, Key_Period, Key_Comma);
 
 
 		if (KeyHit(ParallaxOnOff))
@@ -60,22 +60,22 @@ void CSceneManager::LoadMeshes()
 
 void CSceneManager::CreateModels()
 {
-	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z, mParallaxShaderFile.ps, mParallaxShaderFile.vs);
+	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
 	mHill->AddSecondaryTexture(mCobbleHeightTextureFile);
-	mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mParallaxShaderFile.ps, mParallaxShaderFile.vs);
-	mTeaPot->AddSecondaryTexture(mTechHeightTextureFile);
-	mSphere = mSphereMesh->CreateModel(mStoneTextureFile, mSpherePos.x, mSpherePos.y, mSpherePos.z, mSphereModelShaderFile.ps, mSphereModelShaderFile.vs);
-	mCube = mCubeMesh->CreateModel(mWoodTextureFile, mCubePos.x, mCubePos.y, mCubePos.z, mCubeModelShaderFile.ps, mCubeModelShaderFile.vs);
-	mCube->AddSecondaryTexture(mBrickTextureFile);
-	mCubeNormal = mCubeMesh->CreateModel(mPatternTextureFile, mCubeNormalPos.x, mCubeNormalPos.y, mCubeNormalPos.z, mParallaxShaderFile.ps, mParallaxShaderFile.vs);
-	mCubeNormal->AddSecondaryTexture(mPatternNormalTextureFile);
-	mCubeParallax = mCubeMesh->CreateModel(mTechTextureFile, mCubeParallaxPos.x, mCubeParallaxPos.y, mCubeParallaxPos.z, mParallaxShaderFile.ps, mParallaxShaderFile.vs);
-	mCubeParallax->AddSecondaryTexture(mTechHeightTextureFile);
-	mCubeMultiplicative = mCubeMesh->CreateModel(mGlassTextureFile, mCubeMultiplicativePos.x, mCubeMultiplicativePos.y, mCubeMultiplicativePos.z,
-																	mPixelShaderFile.ps, mPixelShaderFile.vs);
-	mCubeMultiplicative->SetAddBlend(Multi);
-	mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mPixelShaderFile.ps, mPixelShaderFile.vs);
-	mSmoke->SetAddBlend(Alpha);
+	//mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mTeaPot->AddSecondaryTexture(mTechHeightTextureFile);
+	//mSphere = mSphereMesh->CreateModel(mStoneTextureFile, mSpherePos.x, mSpherePos.y, mSpherePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mCube = mCubeMesh->CreateModel(mWoodTextureFile, mCubePos.x, mCubePos.y, mCubePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mCube->AddSecondaryTexture(mBrickTextureFile);
+	//mCubeNormal = mCubeMesh->CreateModel(mPatternTextureFile, mCubeNormalPos.x, mCubeNormalPos.y, mCubeNormalPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mCubeNormal->AddSecondaryTexture(mPatternNormalTextureFile);
+	//mCubeParallax = mCubeMesh->CreateModel(mTechTextureFile, mCubeParallaxPos.x, mCubeParallaxPos.y, mCubeParallaxPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mCubeParallax->AddSecondaryTexture(mTechHeightTextureFile);
+	//mCubeMultiplicative = mCubeMesh->CreateModel(mGlassTextureFile, mCubeMultiplicativePos.x, mCubeMultiplicativePos.y, mCubeMultiplicativePos.z,
+	//	mMainShaderFile.ps, mMainShaderFile.vs);
+	//mCubeMultiplicative->SetAddBlend(Multi);
+	//mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	//mSmoke->SetAddBlend(Alpha);
 }
 
 void CSceneManager::SetUpScene()

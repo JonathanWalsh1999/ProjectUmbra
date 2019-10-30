@@ -4,32 +4,6 @@
 // Using include files to define the type of data passed between the shaders
 
 
-// The structure below describes the vertex data to be sent into vertex shaders that need tangents
-//****| INFO | Models that contain tangents can only be sent into shaders that accept this structure ****//
-struct TangentVertex
-{
-    float3 position : position;
-    float3 normal : normal;
-    float3 tangent : tangent;
-    float2 uv : uv;
-};
-
-struct NormalMappingPixelShaderInput
-{
-    float4 projectedPosition : SV_Position; // This is the position of the pixel to render, this is a required input
-                                            // to the pixel shader and so it uses the special semantic "SV_Position"
-                                            // because the shader needs to identify this important information
-    
-    float3 worldPosition : worldPosition; // Data required for lighting calculations in the pixel shader
-    float3 modelNormal : modelNormal; // --"--
-    float3 modelTangent : modelTangent; // --"--
-    
-    float2 uv : uv; // UVs are texture coordinates. The artist specifies for every vertex which point on the texture is "pinned" to that vertex.
-};
-
-
-
-
 //--------------------------------------------------------------------------------------
 // Shader input / output
 //--------------------------------------------------------------------------------------
@@ -78,6 +52,28 @@ struct PixelShaderInput
     float3 diffuseLight : diffuseLight;
     float3 specularLight : specularLight;
     float2 uv : uv;
+};
+
+
+//****| INFO | Models that contain tangents can only be sent into shaders that accept this structure ****//
+struct TangentVertex
+{
+    float3 position : position;
+    float3 normal : normal;
+    float3 tangent : tangent;
+    float2 uv : uv;
+};
+
+struct NormalMappingPixelShaderInput
+{
+    float4 projectedPosition : SV_Position; // This is the position of the pixel to render, this is a required input
+                                            // to the pixel shader and so it uses the special semantic "SV_Position"
+                                            // because the shader needs to identify this important information
+
+    float3 worldPosition : worldPosition; // Data required for lighting calculations in the pixel shader
+    float3 modelNormal : modelNormal; // --"--
+    float3 modelTangent : modelTangent; // --"--
+    float2 uv : uv; // UVs are texture coordinates. The artist specifies for every vertex which point on the texture is "pinned" to that vertex.
 };
 
 //const static int lightAmount = 1;
