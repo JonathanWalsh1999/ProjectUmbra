@@ -173,7 +173,7 @@ IMesh* CDX11Engine::LoadMesh(const std::string& modelFile)
 
 	if (newMesh == nullptr)
 	{
-		newMesh = new Mesh(modelFile, this, true);
+		newMesh = new Mesh(modelFile, this,true);
 	}
 
 	allMeshes.push_back(newMesh);
@@ -792,10 +792,5 @@ void CDX11Engine::SetAllLights(std::vector<ILight*>& lights)
 void CDX11Engine::SetScene(IScene* scene)
 {
 	myScene = scene;
-}
-
-void CDX11Engine::SetContext(ID3D11DeviceContext& context)
-{
-	mD3DContext = &context;
 }
 

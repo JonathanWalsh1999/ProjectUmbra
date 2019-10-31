@@ -23,10 +23,12 @@ public:
 	// Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
 	// Optionally request tangents to be calculated (for normal and parallax mapping - see later lab)
 	// Will throw a std::runtime_error exception on failure (since constructors can't return errors).
-	Mesh(const std::string& fileName, IEngine * engine, bool requireTangents = true);
+	Mesh(const std::string& fileName, IEngine * engine, bool requireTangents = false);
 
 	IModel* CreateModel(const std::string& textureFile = "brick1.jpg", const float x = 0, const float y = 0, const float z = 0,
-		const std::string& psShaderFile = "LightModel_ps", const std::string vsShaderFile = "LightModel_vs");
+
+		const std::string& psShaderFile = "main_ps", const std::string vsShaderFile = "main_vs");
+
 	~Mesh();
 
 	// The render function assumes shaders, matrices, textures, samplers etc. have been set up already.
@@ -60,8 +62,6 @@ private:
 
     unsigned int       mNumIndices;
     ID3D11Buffer*      mIndexBuffer  = nullptr;
-
-	ID3D11DeviceContext* mD3DContext = nullptr;
 
 	std::string textureFile;
 };

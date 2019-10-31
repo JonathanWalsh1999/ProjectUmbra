@@ -157,7 +157,7 @@ public:
 	virtual void SetAllLights(std::vector<ILight*>& lights) = 0;
 
 	virtual void SetScene(IScene* scene) = 0;
-	virtual void SetContext(ID3D11DeviceContext& context) = 0;
+
 
 	ID3D11DeviceContext* mD3DContext;
 

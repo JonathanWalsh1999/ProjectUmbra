@@ -112,10 +112,10 @@ private:
 	//Shader file constants
 	struct ShaderFile { const std::string ps, vs; };
 
-	ShaderFile mParallaxShaderFile{ "ParallaxMapping_ps", "ParallaxMapping_vs" };//obsolete
+	ShaderFile mParallaxShaderFile{ "ParallaxMapping_ps", "ParallaxMapping_vs" };
 	ShaderFile mSphereModelShaderFile{ "SphereModel_ps", "SphereModel_vs" };
 	ShaderFile mCubeModelShaderFile{ "CubeModel_ps", "CubeModel_vs" };
-	ShaderFile mNormalShaderFile{ "NormalMapping_ps", "NormalMapping_vs"};//obsolete
+	ShaderFile mNormalShaderFile{ "NormalMapping_ps", "NormalMapping_vs"};
 	ShaderFile mPixelShaderFile{ "PixelLighting_ps", "PixelLighting_vs" };
 	ShaderFile mMainShaderFile{ "main_ps", "main_vs" };
 

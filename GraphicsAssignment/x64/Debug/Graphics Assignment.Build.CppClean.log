@@ -1,22 +1,3 @@
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\vc141.pdb
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\vc141.idb
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\timer.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphicshelpers.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\input.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\cvector3.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\cvector2.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\cmatrix4x4.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\camera.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\scene.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\model.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\mesh.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\extern.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\shader.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\scenemanager.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\maingame.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\light.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphicsmain.obj
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\directx11engine.obj
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\basictransform_vs.cso
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\cubemodel_ps.cso
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\cubemodel_vs.cso
@@ -30,23 +11,6 @@ f:\fastuniversity\project - double\projectumbra\graphicsassignment\normalmapping
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\parallaxmapping_ps.cso
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\parallaxmapping_vs.cso
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\pixellighting_ps.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\pixellighting_vs.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\spheremodel_ps.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\spheremodel_vs.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\test_ps.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\test_vs.cso
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\graphics assignment.exe
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\graphics assignment.ilk
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\graphics assignment.pdb
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\\graphics assignment.pdb
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\\graphics assignment.exe
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\\graphics assignment.ilk
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\cl.command.1.tlog
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\cl.read.1.tlog
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\cl.write.1.tlog
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\fxc.command.1.tlog
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\fxc.read.1.tlog
 f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\fxc.write.1.tlog
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\link.command.1.tlog
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\link.read.1.tlog
-f:\fastuniversity\project - double\projectumbra\graphicsassignment\x64\debug\graphics.662ac157.tlog\link.write.1.tlog

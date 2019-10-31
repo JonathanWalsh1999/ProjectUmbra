@@ -60,6 +60,7 @@ void CSceneManager::LoadMeshes()
 
 void CSceneManager::CreateModels()
 {
+
 	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
 	//mHill->AddSecondaryTexture(mCobbleHeightTextureFile);
 	//mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
@@ -76,6 +77,7 @@ void CSceneManager::CreateModels()
 	//mCubeMultiplicative->SetAddBlend(Multi);
 	//mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
 	//mSmoke->SetAddBlend(Alpha);
+
 }
 
 void CSceneManager::SetUpScene()
