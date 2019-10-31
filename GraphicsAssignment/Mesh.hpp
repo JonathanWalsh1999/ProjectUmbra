@@ -26,7 +26,7 @@ public:
 	Mesh(const std::string& fileName, IEngine * engine, bool requireTangents = true);
 
 	IModel* CreateModel(const std::string& textureFile = "brick1.jpg", const float x = 0, const float y = 0, const float z = 0,
-		const std::string& psShaderFile = "main_ps", const std::string vsShaderFile = "main_vs");
+		const std::string& psShaderFile = "LightModel_ps", const std::string vsShaderFile = "LightModel_vs");
 	~Mesh();
 
 	// The render function assumes shaders, matrices, textures, samplers etc. have been set up already.

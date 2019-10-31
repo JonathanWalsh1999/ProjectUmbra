@@ -128,10 +128,10 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
 
-    float3 diffuseLight2 = (0.0f, 0.0f, 0.0f); //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+    float3 diffuseLight2 = lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
     //halfway = normalize(light2Direction + cameraDirection);
-    float3 specularLight2 = (0.0f, 0.0f, 0.0f); // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    float3 specularLight2 = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
     //
 
 
@@ -142,7 +142,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
         // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
 	    // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
 	    // These are the same as the view / projection matrix multiplies in a vertex shader (can improve performance by putting these lines in vertex shader)
-        float4 light1ViewPosition = mul(lightViewMatrix, (input.worldPosition));
+        float4 light1ViewPosition = mul(lightViewMatrix, float4(input.worldPosition, 1));
         float4 light1Projection = mul(lightProjectionMatrix, light1ViewPosition);
 
 		// Convert 2D pixel position as viewed from light into texture coordinates for shadow map - an advanced topic related to the projection step

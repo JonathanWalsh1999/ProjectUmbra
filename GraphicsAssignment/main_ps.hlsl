@@ -16,6 +16,9 @@ Texture2D DiffuseSpecularMap : register(t0); // Diffuse map (main colour) in rgb
 Texture2D NormalHeightMap : register(t1); // Normal map in rgb and height maps in alpha - C++ must load this into slot 1
 SamplerState TexSampler : register(s0); // A sampler is a filter for a texture like bilinear, trilinear or anisotropic
 
+Texture2D ShadowMapLight1 : register(t2); // Texture holding the view of the scene from a light
+SamplerState PointClamp : register(s1); // No filtering for shadow maps (you might think you could use trilinear or similar, but it will filter light depths not the shadows cast...)
+
 
 //--------------------------------------------------------------------------------------
 // Shader code
@@ -82,10 +85,10 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	
 	// Get the height info from the normal map's alpha channel at the given texture coordinate
 	// Rescale from 0->1 range to -x->+x range, x determined by ParallaxDepth setting
-    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
+    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.modelTangent).a - 0.5f);
 	
 	// Use the depth of the texture to offset the given texture coordinate - this corrected texture coordinate will be used from here on
-    float2 offsetTexCoord = input.uv + textureHeight * textureOffsetDir;
+    float2 offsetTexCoord = input.modelTangent + textureHeight * textureOffsetDir;
 
 
 	//*******************************************
@@ -119,15 +122,53 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     float3 halfway = normalize(light1Direction + cameraDirection);
     float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
 
-
+    //SPOT LIGHT
     // Light 2
-    float3 light2Vector = gLight2Position - input.worldPosition;
+    float3 light2Vector = lightPositions[0] - input.worldPosition;
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
-    float3 diffuseLight2 = gLight2Colour * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
-    halfway = normalize(light2Direction + cameraDirection);
-    float3 specularLight2 = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    float3 diffuseLight2 = (0.0f, 0.0f, 0.0f); //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+
+    //halfway = normalize(light2Direction + cameraDirection);
+    float3 specularLight2 = (0.0f, 0.0f, 0.0f); // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    //
+
+
+    const float DepthAdjust = 0.0005f;
+    // Check if pixel is within light cone
+    if (dot(lightFacings, light2Direction) > cos(lightCosHalfAngles))
+    {
+        // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
+	    // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
+	    // These are the same as the view / projection matrix multiplies in a vertex shader (can improve performance by putting these lines in vertex shader)
+        float4 light1ViewPosition = mul(lightViewMatrix, float4(input.worldPosition, 1));
+        float4 light1Projection = mul(lightProjectionMatrix, light1ViewPosition);
+
+		// Convert 2D pixel position as viewed from light into texture coordinates for shadow map - an advanced topic related to the projection step
+		// Detail: 2D position x & y get perspective divide, then converted from range -1->1 to UV range 0->1. Also flip V axis
+        float2 shadowMapUV = 0.5f * light1Projection.xy / light1Projection.w + float2(0.5f, 0.5f);
+        shadowMapUV.y = 1.0f - shadowMapUV.y; // Check if pixel is within light cone
+
+		// Get depth of this pixel if it were visible from the light (another advanced projection step)
+        float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
+		
+		// Compare pixel depth from light with depth held in shadow map of the light. If shadow map depth is less than something is nearer
+		// to the light than this pixel - so the pixel gets no effect from this light
+        if (depthFromLight < ShadowMapLight1.Sample(PointClamp, shadowMapUV).r)
+        {
+            float3 light1Dist = length(lightPositions[0] - input.worldPosition);
+            diffuseLight2 = lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
+            halfway = normalize(light2Direction + cameraDirection);
+            specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
+        }
+        
+    }
+    //
+
+    
+
+
 
 
 

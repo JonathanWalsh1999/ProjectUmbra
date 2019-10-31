@@ -1,58 +1,7 @@
-﻿  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\BasicTransform_vs.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_ps.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(31,38-68): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(39,23-53): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(41,12-56): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(47,134-145): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.hlsl(47,134-152): warning X3081: comma expression used where a vector constructor may have been intended
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\CubeModel_vs.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\DepthOnly_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\LightModel_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\LightModel_vs.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_vs.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_ps.hlsl(67,35-82): warning X3206: 'Sample': implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_ps.hlsl(91,27-65): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_ps.hlsl(94,12-103): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_ps.hlsl(103,28-84): warning X3206: 'Sample': implicit truncation of vector type
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\NormalMapping_vs.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(88,45-98): warning X3206: 'Sample': implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(91,29-81): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(127,27-65): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(131,29-38): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(131,29-44): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(134,30-39): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(134,30-45): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(145,37-79): warning X3206: 'mul': implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(160,40-78): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.hlsl(161,29-106): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\ParallaxMapping_vs.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_ps.hlsl(63,43-81): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_ps.hlsl(65,33-71): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_ps.hlsl(68,16-94): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_ps.hlsl(61,5-41): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_ps.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PixelLighting_vs.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_ps.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.hlsl(31,38-68): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.hlsl(39,23-53): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.hlsl(41,12-56): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.hlsl(47,135-146): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.hlsl(47,135-152): warning X3081: comma expression used where a vector constructor may have been intended
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\SphereModel_vs.cso
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_ps.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.hlsl(31,38-68): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.hlsl(39,23-53): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.hlsl(41,12-56): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.hlsl(47,134-145): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.hlsl(47,134-152): warning X3081: comma expression used where a vector constructor may have been intended
-  
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\test_vs.cso
+﻿  MAINGame.cpp
+f:\fastuniversity\project - double\projectumbra\graphicsassignment\maingame.cpp(7): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Model.cpp
+  SceneManager.cpp
+  Mesh.cpp
+  Generating Code...
   Graphics Assignment.vcxproj -> F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\\Graphics Assignment.exe
