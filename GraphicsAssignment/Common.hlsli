@@ -23,8 +23,8 @@ struct NormalMappingPixelShaderInput
     float3 worldPosition : worldPosition; // Data required for lighting calculations in the pixel shader
     float3 modelNormal : modelNormal; // --"--
     float3 modelTangent : modelTangent; // --"--
-    
     float2 uv : uv; // UVs are texture coordinates. The artist specifies for every vertex which point on the texture is "pinned" to that vertex.
+
 };
 
 

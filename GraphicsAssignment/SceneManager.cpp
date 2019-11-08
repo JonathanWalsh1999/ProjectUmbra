@@ -26,7 +26,7 @@ CSceneManager::CSceneManager(IEngine * engine)
 		/*Code to be updated once per frame*/
 
 		//PulsateLight(mLight1, mLight1Strength);
-		//CycleLightColours(mLight2);	
+		CycleLightColours(mLight2);	
 	
 		WiggleUpdate();
 
@@ -53,30 +53,30 @@ CSceneManager::CSceneManager(IEngine * engine)
 void CSceneManager::LoadMeshes()
 {
 	mHillMesh = myEngine->LoadMesh(mHillMeshFile);
-	//mTeaPotMesh = myEngine->LoadMesh(mTeaMeshFile);
-	//mSphereMesh = myEngine->LoadMesh(mSphereMeshFile);
-	//mCubeMesh = myEngine->LoadMesh(mCubeMeshFile);
+	mTeaPotMesh = myEngine->LoadMesh(mTeaMeshFile);
+	mSphereMesh = myEngine->LoadMesh(mSphereMeshFile);
+	mCubeMesh = myEngine->LoadMesh(mCubeMeshFile);
 }
 
 void CSceneManager::CreateModels()
 {
 
 	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mHill->AddSecondaryTexture(mCobbleHeightTextureFile);
-	//mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mTeaPot->AddSecondaryTexture(mTechHeightTextureFile);
-	//mSphere = mSphereMesh->CreateModel(mStoneTextureFile, mSpherePos.x, mSpherePos.y, mSpherePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mCube = mCubeMesh->CreateModel(mWoodTextureFile, mCubePos.x, mCubePos.y, mCubePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mCube->AddSecondaryTexture(mBrickTextureFile);
-	//mCubeNormal = mCubeMesh->CreateModel(mPatternTextureFile, mCubeNormalPos.x, mCubeNormalPos.y, mCubeNormalPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mCubeNormal->AddSecondaryTexture(mPatternNormalTextureFile);
-	//mCubeParallax = mCubeMesh->CreateModel(mTechTextureFile, mCubeParallaxPos.x, mCubeParallaxPos.y, mCubeParallaxPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mCubeParallax->AddSecondaryTexture(mTechHeightTextureFile);
-	//mCubeMultiplicative = mCubeMesh->CreateModel(mGlassTextureFile, mCubeMultiplicativePos.x, mCubeMultiplicativePos.y, mCubeMultiplicativePos.z,
-	//	mMainShaderFile.ps, mMainShaderFile.vs);
-	//mCubeMultiplicative->SetAddBlend(Multi);
-	//mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	//mSmoke->SetAddBlend(Alpha);
+	mHill->AddSecondaryTexture(mCobbleHeightTextureFile);
+	mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mTeaPot->AddSecondaryTexture(mTechHeightTextureFile);
+	mSphere = mSphereMesh->CreateModel(mStoneTextureFile, mSpherePos.x, mSpherePos.y, mSpherePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mCube = mCubeMesh->CreateModel(mWoodTextureFile, mCubePos.x, mCubePos.y, mCubePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mCube->AddSecondaryTexture(mBrickTextureFile);
+	mCubeNormal = mCubeMesh->CreateModel(mPatternTextureFile, mCubeNormalPos.x, mCubeNormalPos.y, mCubeNormalPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mCubeNormal->AddSecondaryTexture(mPatternNormalTextureFile);
+	mCubeParallax = mCubeMesh->CreateModel(mTechTextureFile, mCubeParallaxPos.x, mCubeParallaxPos.y, mCubeParallaxPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mCubeParallax->AddSecondaryTexture(mTechHeightTextureFile);
+	mCubeMultiplicative = mCubeMesh->CreateModel(mGlassTextureFile, mCubeMultiplicativePos.x, mCubeMultiplicativePos.y, mCubeMultiplicativePos.z,
+		mMainShaderFile.ps, mMainShaderFile.vs);
+	mCubeMultiplicative->SetAddBlend(Multi);
+	mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mSmoke->SetAddBlend(Alpha);
 
 }
 
@@ -95,7 +95,7 @@ void CSceneManager::SetUpLighting()
 	EBlendingType newBlend = Add;
 
 	mLight1Strength = 120.0f;
-	mLight1Position = { 0.0f, 30.0f, 50.0f };
+	mLight1Position = { 0.0f, 10.0f, -150.0f };
 	mLight1ConeAngle = 90.0f;
 	mLight1Colour = { 1.0f, 1.0f, 1.0f };
 
@@ -104,7 +104,7 @@ void CSceneManager::SetUpLighting()
 	mLightModelScale = 0.7f;
 
 	mLight2Strength = 40.0f;
-	mLight2Position = { 150.0f, 50.0f, 0.0f };
+	mLight2Position = { 150.0f, 50.0f, 5000.0f };
 
 
 	mLight1 = myEngine->CreateLight();

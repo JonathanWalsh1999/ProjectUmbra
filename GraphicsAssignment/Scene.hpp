@@ -42,7 +42,7 @@ private:
 
 	std::string mLastError;
 
-	const int mShadowMapSize = 256;
+	const int mShadowMapSize = 1024;//resolution of shadows - Quality vs performance
 	ID3D11Texture2D* mShadowMapTexture = nullptr; // This object represents the memory used by the texture on the GPU
 	ID3D11DepthStencilView*   mShadowMapDepthStencil = nullptr; // This object is used when we want to render to the texture above **as a depth buffer**
 	ID3D11ShaderResourceView* mShadowMapSRV = nullptr; // This object is used to give shaders access to the texture above (SRV = shader resource view)

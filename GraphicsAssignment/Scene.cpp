@@ -134,7 +134,6 @@ void CScene::RenderSceneFromCamera(ICamera * cam)
 
 
 
-
 	//// Select the texture and sampler to use in the pixel shader
 	//mD3DContext->PSSetShaderResources(0, 1, &gLightDiffuseMapSRV); // First parameter must match texture slot number in the shaer
 	//mD3DContext->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
@@ -144,16 +143,22 @@ void CScene::RenderSceneFromCamera(ICamera * cam)
 }
 void CScene::RenderScene(float& frameTime)
 {
-
 	D3D11_VIEWPORT vp;
 	allModels = mEngine->GetAllModels();
 	allModels = Model::GetAllObjects();
 	mEngine->SetAllModels(allModels);
 
 	mEngine->Messages();
+	mPerFrameConstants.cameraPosition = camera->Position();
+
+	RenderShadow(vp);
+	RenderDepthBufferFromLight(0);
+
+
+
 	//// Render lights ////
 	// Rendered with different shaders, textures, states from other models
-	for (unsigned int i = 0; i < mEngine->GetAllLights().size(); ++i)
+	for (unsigned int i = 0; i < mLights.size(); ++i)
 	{
 		mEngine->GetAllLights()[i]->RenderLight();
 	}
@@ -161,11 +166,11 @@ void CScene::RenderScene(float& frameTime)
 
 	// Set up the light information in the constant buffer - this is the same for portal and main render
 	// Don't send to the GPU yet, the function RenderSceneFromCamera will do that
-	//gPerFrameConstants.light1Colour = gLight1Colour * gLight1Strength;
+	//g	PerFrameConstants.light1Colour = gLight1Colour * gLight1Strength;
 	//gPerFrameConstants.light1Position = light->Position();
 	//gPerFrameConstants.ambientColour = gAmbientColour;
 	//gPerFrameConstants.specularPower = gSpecularPower;
-	mPerFrameConstants.cameraPosition = camera->Position();
+
 
 	//// Main scene rendering ////
 
@@ -190,35 +195,47 @@ void CScene::RenderScene(float& frameTime)
 	mEngine->GetContext()->RSSetViewports(1, &vp);
 
 
+
+
+
+
 	// Render the scene for the main window	
-	RenderModels();
-	RenderShadow(vp);
-	RenderDepthBufferFromLight(0);
+
+	RenderSceneFromCamera(camera);
 
 	// Set shadow maps in shaders
 	// First parameter is the "slot", must match the Texture2D declaration in the HLSL code
 	// In this app the diffuse map uses slot 0, the shadow maps use slots 1 onwards. If we were using other maps (e.g. normal map) then
 	// we might arrange things differently
 	mPointSampler = mEngine->GetPointSampler();
-
 	mEngine->GetContext()->PSSetShaderResources(2, 1, &mShadowMapSRV);
-	mEngine->GetContext()->PSSetSamplers(2, 1, &mPointSampler);
+	mEngine->GetContext()->PSSetSamplers(1, 1, &mPointSampler);	
 
-	RenderSceneFromCamera(camera);
+	//// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
+	RenderModels();
+
+
+
+	ID3D11ShaderResourceView* nullView = nullptr;
+	mEngine->GetContext()->PSSetShaderResources(2, 1, &nullView);
+
+
+
+
 
 
 
 	UpdateScene(frameTime);
 
-	// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
-	ID3D11ShaderResourceView* nullView = nullptr;
-	mEngine->GetContext()->PSSetShaderResources(1, 1, &nullView);
+
+
 
 	mEngine->GetSwapChain()->Present(0, 0);
 
 }
 void CScene::RenderModels()
 {
+	
 	for (unsigned int j = 0; j < mEngine->GetAllModels().size(); ++j)
 	{
 		//Set the correct vs and ps for each model
@@ -422,7 +439,7 @@ void CScene::RenderDepthBufferFromLight(int lightIndex)
 	mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
 
 	// Render models - no state changes required between each object in this situation (no textures used in this step)
-	for (unsigned int i = 0; i < mEngine->GetAllModels().size() - 2; ++i)
+	for (unsigned int i = 0; i < mEngine->GetAllModels().size(); ++i)
 	{
 		mEngine->GetAllModels()[i]->Render();
 	}

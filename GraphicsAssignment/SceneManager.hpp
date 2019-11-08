@@ -91,7 +91,7 @@ private:
 	const KeyCode MoveCube = Key_Period;
 
 	//Mesh file constants
-	const std::string mHillMeshFile = "Hills.x";
+	const std::string mHillMeshFile = "Ground.x";
 	const std::string mTeaMeshFile = "Teapot.x";
 	const std::string mSphereMeshFile = "Sphere.x";
 	const std::string mCubeMeshFile = "Cube.x";

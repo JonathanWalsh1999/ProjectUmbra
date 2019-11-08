@@ -18,7 +18,7 @@ NormalMappingPixelShaderInput main(TangentVertex modelVertex)
     NormalMappingPixelShaderInput output; // This is the data the pixel shader requires from this vertex shader
 
     // Input position is x,y,z only - need a 4th element to multiply by a 4x4 matrix. Use 1 for a point (0 for a vector) - recall lectures
-    float4 modelPosition = float4(modelVertex.position, 1);
+    float4 modelPosition = float4(modelVertex.position, 1.0f);
 
     // Multiply by the world matrix passed from C++ to transform the model vertex position into world space. 
     // In a similar way use the view matrix to transform the vertex from world space into view space (camera's point of view)

@@ -14,9 +14,9 @@
 //****| INFO | Normal map, now contains per pixel heights in the alpha channel ****//
 Texture2D DiffuseSpecularMap : register(t0); // Diffuse map (main colour) in rgb and specular map (shininess level) in alpha - C++ must load this into slot 0
 Texture2D NormalHeightMap : register(t1); // Normal map in rgb and height maps in alpha - C++ must load this into slot 1
-SamplerState TexSampler : register(s0); // A sampler is a filter for a texture like bilinear, trilinear or anisotropic
-
 Texture2D ShadowMapLight1 : register(t2); // Texture holding the view of the scene from a light
+
+SamplerState TexSampler : register(s0); // A sampler is a filter for a texture like bilinear, trilinear or anisotropic
 SamplerState PointClamp : register(s1); // No filtering for shadow maps (you might think you could use trilinear or similar, but it will filter light depths not the shadows cast...)
 
 
@@ -85,10 +85,10 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	
 	// Get the height info from the normal map's alpha channel at the given texture coordinate
 	// Rescale from 0->1 range to -x->+x range, x determined by ParallaxDepth setting
-    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.modelTangent).a - 0.5f);
+    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
 	
 	// Use the depth of the texture to offset the given texture coordinate - this corrected texture coordinate will be used from here on
-    float2 offsetTexCoord = input.modelTangent + textureHeight * textureOffsetDir;
+    float2 offsetTexCoord = input.uv + textureHeight * textureOffsetDir;
 
 
 	//*******************************************
@@ -137,7 +137,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
     const float DepthAdjust = 0.0005f;
     // Check if pixel is within light cone
-    if (dot(lightFacings, light2Direction) > cos(lightCosHalfAngles))
+    if (dot(lightFacings, -light2Direction) > cos(lightCosHalfAngles))
     {
         // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
 	    // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
