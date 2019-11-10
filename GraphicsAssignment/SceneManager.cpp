@@ -94,8 +94,8 @@ void CSceneManager::SetUpLighting()
 {
 	EBlendingType newBlend = Add;
 
-	mLight1Strength = 120.0f;
-	mLight1Position = { 0.0f, 10.0f, -150.0f };
+	mLight1Strength = 100.0f;
+	mLight1Position = { 0.0f, 80.0f, -100.0f };
 	mLight1ConeAngle = 90.0f;
 	mLight1Colour = { 1.0f, 1.0f, 1.0f };
 

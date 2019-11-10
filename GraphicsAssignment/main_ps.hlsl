@@ -153,15 +153,18 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 		// Get depth of this pixel if it were visible from the light (another advanced projection step)
         float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
 		
+        float shadowMapDepthValue = ShadowMapLight1.Sample(PointClamp, shadowMapUV).r;
+
 		// Compare pixel depth from light with depth held in shadow map of the light. If shadow map depth is less than something is nearer
 		// to the light than this pixel - so the pixel gets no effect from this light
-        if (depthFromLight < ShadowMapLight1.Sample(PointClamp, shadowMapUV).r)
+        if (depthFromLight < shadowMapDepthValue)
         {
             float3 light1Dist = length(lightPositions[0] - input.worldPosition);
             diffuseLight2 = lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
             halfway = normalize(light2Direction + cameraDirection);
             specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
         }
+
         
     }
     //

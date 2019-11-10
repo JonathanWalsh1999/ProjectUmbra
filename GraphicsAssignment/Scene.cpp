@@ -324,7 +324,7 @@ void CScene::RenderShadow(D3D11_VIEWPORT& vp)
 	// Also clear the the shadow map depth buffer to the far distance
 	mEngine->GetContext()->OMSetRenderTargets(0, nullptr, mShadowMapDepthStencil);
 	mEngine->GetContext()->ClearDepthStencilView(mShadowMapDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	//mLight[0]->RenderDepthBufferFromLight(allModels);
+
 }
 
 void CScene::UpdateScene(float frameTime)

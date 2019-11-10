@@ -117,7 +117,7 @@ private:
 	ShaderFile mCubeModelShaderFile{ "CubeModel_ps", "CubeModel_vs" };
 	ShaderFile mNormalShaderFile{ "NormalMapping_ps", "NormalMapping_vs"};
 	ShaderFile mPixelShaderFile{ "PixelLighting_ps", "PixelLighting_vs" };
-	ShaderFile mMainShaderFile{ "main_ps", "main_vs" };
+	ShaderFile mMainShaderFile{ "PCF_ps", "main_vs" };
 
 	//Model Initial Positions
 	CVector3 mHillPos{ 0.0f, 0.0f, 0.0f };
