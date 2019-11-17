@@ -22,6 +22,7 @@
 
 
 	enum EBlendingType { None, Add, Multi, Alpha };
+	enum EShadowEffect { ZBuffer, PCF};
 
 	// Viewport size
 	const int gViewportWidth = 1920;
@@ -69,7 +70,8 @@
 		CVector3   cameraPosition;
 	//	float      padding5;
 
-		float wiggle;
+		//float wiggle;
+		int shadowEffect;//Each shadow effect will have a number assigned to them, so that it will be easy to change on demand in C++. e.g. z-buffer = 0 pcf = 1 etc.
 
 		CVector3 lightFacings;
 		float lightCosHalfAngles;

@@ -20,31 +20,27 @@ SamplerState TexSampler : register(s0); // A sampler is a filter for a texture l
 SamplerState PointClamp : register(s1); // No filtering for shadow maps (you might think you could use trilinear or similar, but it will filter light depths not the shadows cast...)
 
 
-//--------------------------------------------------------------------------------------
-// Shader code
-//--------------------------------------------------------------------------------------
+float PCF(int sampleSize, float lightDepth, float2 shadowUVCoords)
+{
+    float shadow = 0.0f;
+    float offSet = 1.0f / 1024;//How much each sample will diverage from map
+        
+    for (int x = 0; x < sampleSize; ++x)
+    {
+        for (int y = 0; y < sampleSize; ++y)
+        {
+            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet).r);
+            if (lightDepth < pcfDepth)//Checks the light depth against the sample calculated from an offest from shadow map
+            {
+                shadow += 1.0f;
+            }
+        }
+    }
+    shadow /= (sampleSize * sampleSize); //Get the average depth based on the amount of samples
+    return shadow;
+}
 
-//***| INFO |*********************************************************************************
-// Normal mapping pixel shader function. The lighting part of the shader is the same as the
-// per-pixel lighting shader - only the source of the surface normal is different
-//
-// An extra "Normal Map" texture is used - this contains normal (x,y,z) data in place of
-// (r,g,b) data indicating the normal of the surface *per-texel*. This allows the lighting
-// to take account of bumps on the texture surface. Using these normals is complex:
-//    1. We must store a "tangent" vector as well as a normal for each vertex (the tangent
-//       is basically the direction of the texture U axis in model space for each vertex)
-//    2. Get the (interpolated) model normal and tangent at this pixel from the vertex
-//       shader - these are the X and Z axes of "tangent space"
-//    3. Use a "cross-product" to calculate the bi-tangent - the missing Y axis
-//    4. Form the "tangent matrix" by combining these axes
-//    5. Extract the normal from the normal map texture for this pixel
-//    6. Use the tangent matrix to transform the texture normal into model space, then
-//       use the world matrix to transform it into world space
-//    7. This final world-space normal can be used in the usual lighting calculations, and
-//       will show the "bumpiness" of the normal map
-//
-// Note that all this detail boils down to just five extra lines of code here
-//********************************************************************************************
+
 float4 main(NormalMappingPixelShaderInput input) : SV_Target
 {
 	//************************
@@ -156,46 +152,19 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
 		// Get depth of this pixel if it were visible from the light (another advanced projection step)
         float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
-        float shadowMapDepthValue = ShadowMapLight1.Sample(PointClamp, shadowMapUV).r;
-		// Compare pixel depth from light with depth held in shadow map of the light. If shadow map depth is less than something is nearer
-		// to the light than this pixel - so the pixel gets no effect from this light
-        float shadow = 0.0f;
-        float offSet = 1.0f / 1024;
-        int filterSize = 4;
-        
-        //PCF
-        for (int x = 0; x < filterSize; ++x)
-        {
-            for (int y = 0; y < filterSize; ++y)
-            {
-             
-                float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowMapUV + float2(x * offSet, y * offSet).r);
-                shadow += depthFromLight < pcfDepth ? 1.0f : 0.0f;
 
 
-            }
 
-        }
-        shadow /= (filterSize * filterSize);
+        float3 light1Dist = length(lightPositions[0] - input.worldPosition);
+        // Equations from lighting lecture and * the shadow using PCF
+        diffuseLight2 += (lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * PCF(4, depthFromLight, shadowMapUV); 
+        halfway = normalize(light2Direction + cameraDirection);
+        specularLight2 += diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower);    
 
-        if (depthFromLight < shadow)
-        {
-            float3 light1Dist = length(lightPositions[0] - input.worldPosition);
-            diffuseLight2 += lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
-            halfway = normalize(light2Direction + cameraDirection);
-            specularLight2 += diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower);    
-        }
-        diffuseLight2 *= shadow;
-        specularLight2 *= shadow;
+
     }
     //
-
     
-
-
-
-
-
     // Sample diffuse material colour for this pixel from a texture using a given sampler that you set up in the C++ code
     // Ignoring any alpha in the texture, just reading RGB
     float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, offsetTexCoord); // Use offset texture coordinate from parallax mapping

@@ -29,6 +29,7 @@ public:
 
 	//Major engine methods
 
+
 	void EngineRun();
 	bool IsRunning();
 	void StartWindowed();
@@ -127,6 +128,8 @@ public:
 
 	void SetScene(IScene* scene);
 
+	void SetShadowEffect(EShadowEffect& setEffect);
+
 private:
 
 	//
@@ -223,8 +226,6 @@ private:
 
 
 	PerFrameConstants mPerFrameConstants;      // This variable holds the CPU-side constant buffer described above
-
-
 };
 
 

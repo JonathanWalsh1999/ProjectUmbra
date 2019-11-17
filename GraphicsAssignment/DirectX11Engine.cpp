@@ -28,6 +28,7 @@ CDX11Engine::CDX11Engine()
 
 }
 
+
 void CDX11Engine::StartWindowed()
 {
 	// Create a window to display the scene
@@ -794,3 +795,8 @@ void CDX11Engine::SetScene(IScene* scene)
 	myScene = scene;
 }
 
+void CDX11Engine::SetShadowEffect(EShadowEffect& setEffect)
+{
+	mPerFrameConstants.shadowEffect = static_cast<int>(setEffect);
+	myScene->SetFrameConstants(mPerFrameConstants);
+}

@@ -1,24 +1,10 @@
-﻿F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(127,27-65): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(131,29-38): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(131,29-44): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(134,30-39): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(134,30-45): warning X3081: comma expression used where a vector constructor may have been intended
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,23-115): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(183,40-78): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(184,30-107): warning X3206: implicit truncation of vector type
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.hlsl(172,34-115): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+﻿F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,19-114): warning X3206: implicit truncation of vector type
+  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.cso
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,30-114): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,30-114): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,30-114): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,30-114): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(31,30-114): warning X3595: gradient instruction used in a loop with varying iteration; partial derivatives may have undefined value
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\main_ps.hlsl(49,5): warning X4000: use of potentially uninitialized variable (ZBuffer)
   
-  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\PCF_ps.cso
   Graphics Assignment.vcxproj -> F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\\Graphics Assignment.exe

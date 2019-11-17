@@ -19,32 +19,37 @@ Texture2D ShadowMapLight1 : register(t2); // Texture holding the view of the sce
 SamplerState TexSampler : register(s0); // A sampler is a filter for a texture like bilinear, trilinear or anisotropic
 SamplerState PointClamp : register(s1); // No filtering for shadow maps (you might think you could use trilinear or similar, but it will filter light depths not the shadows cast...)
 
+float PCF(int sampleSize, float lightDepth, float2 shadowUVCoords)
+{
+    float shadow = 0.0f;
+    float offSet = 1.0f / 1024; //How much each sample will diverage from map
+        
+    for (int x = 0; x < sampleSize; ++x)
+    {
+        for (int y = 0; y < sampleSize; ++y)
+        {
+            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet).r);
+            if (lightDepth < pcfDepth)//Checks the light depth against the sample calculated from an offest from shadow map
+            {
+                shadow += 1.0f;
+            }
+        }
+    }
+    shadow /= (sampleSize * sampleSize); //Get the average depth based on the amount of samples
+    return shadow;
+}
 
-//--------------------------------------------------------------------------------------
-// Shader code
-//--------------------------------------------------------------------------------------
+float ZBuffer(float lightDepth, float2 shadowUVCoords)
+{
+    float shadowMapDepthValue = ShadowMapLight1.Sample(PointClamp, shadowUVCoords).r;
 
-//***| INFO |*********************************************************************************
-// Normal mapping pixel shader function. The lighting part of the shader is the same as the
-// per-pixel lighting shader - only the source of the surface normal is different
-//
-// An extra "Normal Map" texture is used - this contains normal (x,y,z) data in place of
-// (r,g,b) data indicating the normal of the surface *per-texel*. This allows the lighting
-// to take account of bumps on the texture surface. Using these normals is complex:
-//    1. We must store a "tangent" vector as well as a normal for each vertex (the tangent
-//       is basically the direction of the texture U axis in model space for each vertex)
-//    2. Get the (interpolated) model normal and tangent at this pixel from the vertex
-//       shader - these are the X and Z axes of "tangent space"
-//    3. Use a "cross-product" to calculate the bi-tangent - the missing Y axis
-//    4. Form the "tangent matrix" by combining these axes
-//    5. Extract the normal from the normal map texture for this pixel
-//    6. Use the tangent matrix to transform the texture normal into model space, then
-//       use the world matrix to transform it into world space
-//    7. This final world-space normal can be used in the usual lighting calculations, and
-//       will show the "bumpiness" of the normal map
-//
-// Note that all this detail boils down to just five extra lines of code here
-//********************************************************************************************
+    if (lightDepth < shadowMapDepthValue)
+    {
+        return shadowMapDepthValue;
+    }
+    return 0.0f;
+}
+
 float4 main(NormalMappingPixelShaderInput input) : SV_Target
 {
 	//************************
@@ -124,14 +129,14 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
     //SPOT LIGHT
     // Light 2
-    float3 light2Vector = lightPositions[0] - input.worldPosition;
+    float3 light2Vector = lightPositions[0].xyz - input.worldPosition;
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
 
-    float3 diffuseLight2 = (0.0f, 0.0f, 0.0f); //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+    float3 diffuseLight2 = 0.0f; //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
     //halfway = normalize(light2Direction + cameraDirection);
-    float3 specularLight2 = (0.0f, 0.0f, 0.0f); // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    float3 specularLight2 = 0.0f; // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
     //
 
 
@@ -153,19 +158,22 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 		// Get depth of this pixel if it were visible from the light (another advanced projection step)
         float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
 		
-        float shadowMapDepthValue = ShadowMapLight1.Sample(PointClamp, shadowMapUV).r;
-
-		// Compare pixel depth from light with depth held in shadow map of the light. If shadow map depth is less than something is nearer
-		// to the light than this pixel - so the pixel gets no effect from this light
-        if (depthFromLight < shadowMapDepthValue)
+        //User chooses shadow effect based on shadowEffect integer.  Would've been nice to use enums here but they're not supported by HLSL
+        float shadow = 0.0f;
+        if(shadowEffect == 0)
         {
-            float3 light1Dist = length(lightPositions[0] - input.worldPosition);
-            diffuseLight2 = lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
-            halfway = normalize(light2Direction + cameraDirection);
-            specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
+           shadow = ZBuffer(depthFromLight, shadowMapUV);
+        }
+        else if(shadowEffect == 1)
+        {
+            shadow = PCF(4, depthFromLight, shadowMapUV);
         }
 
-        
+        float3 light1Dist = length(lightPositions[0].xyz - input.worldPosition);
+        diffuseLight2 = (lightColours[0].xyz * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * shadow; // Equations from lighting lecture
+        halfway = normalize(light2Direction + cameraDirection);
+        specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
+         
     }
     //
 

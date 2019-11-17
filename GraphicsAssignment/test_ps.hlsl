@@ -10,7 +10,7 @@ float4 main(PixelShaderInput input) : SV_TARGET
     // Extract diffuse material colour for this pixel from a texture (will cover textures in next lab)
 
     float3 diffuseMaterial;
-    float timer = wiggle / 10.0f;
+    float timer = 1.0f / 10.0f;
 
     diffuseMaterial = lerp(DiffuseMap.Sample(TexSampler, input.uv).rgb, DiffuseMap2.Sample(TexSampler, input.uv).rgb, timer);
 

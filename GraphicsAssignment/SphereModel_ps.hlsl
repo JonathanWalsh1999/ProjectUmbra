@@ -9,7 +9,7 @@ float4 main(PixelShaderInput input) : SV_TARGET
     // Extract diffuse material colour for this pixel from a texture (will cover textures in next lab)
     //https://www.gamedev.net/forums/topic/592497-texture-atlas-and-scrolling-textures/
 
-    input.uv += (0.001f*wiggle, 0.001f*wiggle);
+    input.uv += (0.001f*1.0f, 0.001f*1.0f);
     
     float3 diffuseMaterial = DiffuseMap.Sample(TexSampler, input.uv).rgb;
 

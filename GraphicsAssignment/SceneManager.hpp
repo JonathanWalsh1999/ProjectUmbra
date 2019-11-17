@@ -26,7 +26,7 @@ private:
 	void CycleLightColours(ILight* chosenLight); //Change RGB values constantly
 	void UpdateColourChannels(float& channelValue, bool& rgbBool);
 
-	void WiggleUpdate();//Change the wiggle variable values up and down depending on frame time.
+
 
 	const std::string mMediaFolder = "media"; //Folder to store all files such as textures and meshes for scene
 
@@ -117,7 +117,7 @@ private:
 	ShaderFile mCubeModelShaderFile{ "CubeModel_ps", "CubeModel_vs" };
 	ShaderFile mNormalShaderFile{ "NormalMapping_ps", "NormalMapping_vs"};
 	ShaderFile mPixelShaderFile{ "PixelLighting_ps", "PixelLighting_vs" };
-	ShaderFile mMainShaderFile{ "PCF_ps", "main_vs" };
+	ShaderFile mMainShaderFile{ "main_ps", "main_vs" };
 
 	//Model Initial Positions
 	CVector3 mHillPos{ 0.0f, 0.0f, 0.0f };
@@ -130,4 +130,8 @@ private:
 	CVector3 mSmokePos{40.0f, 28.0f, -20.0f};
 
 	IScene* myScene;
+
+	EShadowEffect myShadow;
+	KeyCode toZBuffer = Key_1;
+	KeyCode toPCF = Key_2;
 };

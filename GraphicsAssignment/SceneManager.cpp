@@ -6,6 +6,8 @@ CSceneManager::CSceneManager(IEngine * engine)
 
 	myEngine->StartWindowed();
 	myEngine->EngineRun();
+	myShadow = ZBuffer;
+
 
 	mTimer.Start();
 
@@ -28,11 +30,23 @@ CSceneManager::CSceneManager(IEngine * engine)
 		//PulsateLight(mLight1, mLight1Strength);
 		CycleLightColours(mLight2);	
 	
-		WiggleUpdate();
+
 
 		//myEngine->mPerFrameConstants.gParallaxDepth = (parallaxOn ? 0.08f : 0);
 
 		//mCubeNormal->Control(mFrameTime, Key_U, Key_J, Key_H, Key_K, Key_0, Key_0, Key_Period, Key_Comma);
+
+		//Toggle between the different shadowing techniques
+		if (KeyHit(toZBuffer))
+		{
+			myShadow = ZBuffer;
+			myEngine->SetShadowEffect(myShadow);
+		}
+		if (KeyHit(toPCF))
+		{
+			myShadow = PCF;
+			myEngine->SetShadowEffect(myShadow);
+		}
 
 
 		if (KeyHit(ParallaxOnOff))
@@ -206,31 +220,7 @@ void CSceneManager::UpdateColourChannels(float& channelValue, bool& rgbBool)
 	}
 }
 
-void CSceneManager::WiggleUpdate()
-{
-	static bool wigglePositive = true;
 
-	if (wigglePositive)
-	{
-		//Increase wiggle value
-		//myEngine->mPerFrameConstants.wiggle += 10.0f * mFrameTime;
-	}
-	else
-	{
-		//Decrease wiggle value
-		//myEngine->mPerFrameConstants.wiggle -= 10.0f * mFrameTime;
-	}
-
-
-	//if (myEngine->mPerFrameConstants.wiggle > 10.0f)
-	//{
-	//	wigglePositive = false;
-	//}
-	//else if(myEngine->mPerFrameConstants.wiggle < 0.0f)
-	//{
-	//	wigglePositive = true;
-	//}
-}
 
 CSceneManager::~CSceneManager()
 {	

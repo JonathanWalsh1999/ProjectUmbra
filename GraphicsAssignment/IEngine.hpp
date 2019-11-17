@@ -84,7 +84,7 @@ public:
 	// you want to update it with. The structure will be copied in full over to the GPU constant buffer, where it will
 	// be available to shaders. This is used to update model and camera positions, lighting data etc.
 
-	template <class T>
+	template <typename T>
 	void UpdateConstantBuffer(ID3D11Buffer* buffer, const T& bufferData)
 	{
 		D3D11_MAPPED_SUBRESOURCE cb;
@@ -157,10 +157,11 @@ public:
 	virtual void SetAllLights(std::vector<ILight*>& lights) = 0;
 
 	virtual void SetScene(IScene* scene) = 0;
+	virtual void SetShadowEffect(EShadowEffect& setEffect) = 0;
 
 
 	ID3D11DeviceContext* mD3DContext;
 
 };
 
-void main(IEngine* myEngine);
+int main(IEngine* myEngine);

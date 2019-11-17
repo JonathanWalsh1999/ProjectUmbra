@@ -123,7 +123,8 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
 
     float3   gCameraPosition;
   //  float    padding5;
-    float wiggle;
+    //float wiggle;
+    int shadowEffect;//Each shadow effect will have a number assigned to them, so that it will be easy to change on demand in C++. e.g. z-buffer = 0 pcf = 1 etc.
 
     float3 lightFacings;
     float lightCosHalfAngles;

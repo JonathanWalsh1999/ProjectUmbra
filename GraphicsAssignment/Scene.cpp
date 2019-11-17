@@ -268,7 +268,7 @@ void CScene::RenderModels()
 
 
 			//Change blending for the flare models.  (Additive by default)
-			if (KeyHeld(Key_2))
+			if (KeyHeld(Key_F1))
 			{
 				//NO BLENDING
 				// States - additive blending, read-only depth buffer and no culling (standard set-up for blending

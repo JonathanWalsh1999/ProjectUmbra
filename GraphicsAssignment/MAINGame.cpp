@@ -3,8 +3,10 @@
 
 #include "SceneManager.hpp"//The manager class --- > Entire Game Code
 
-void main(IEngine* myEngine)
+int main(IEngine* myEngine)
 {
 	CSceneManager* scene = new CSceneManager(myEngine);
 	delete scene;
+
+	return 0;
 }

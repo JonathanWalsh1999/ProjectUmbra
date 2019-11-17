@@ -18,8 +18,8 @@ PixelShaderInput main(BasicVertex modelVertex)
     worldNormal = normalize(worldNormal); //Make normals equal to 1 by normalisation
 
 
-    worldPosition.x += sin(modelPosition.y + wiggle) * 0.1f;
-    worldPosition.y += sin(modelPosition.x + wiggle) * 0.1f;
+    worldPosition.x += sin(modelPosition.y ) * 0.1f;
+    worldPosition.y += sin(modelPosition.x ) * 0.1f;
    //worldPosition += worldNormal * (sin(wiggle) + 1.0f) * 0.1f;
 
     // In a similar way use the view matrix to transform the vertex from world space into view space (camera's point of view)
