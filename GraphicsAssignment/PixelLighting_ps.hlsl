@@ -33,11 +33,11 @@ float4 main(LightingPixelShaderInput input) : SV_Target
     float3 cameraDirection = normalize(gCameraPosition - input.worldPosition);
 
     // Light 1
-    float3 light1Direction = normalize(gLight1Position - input.worldPosition);
-    float3 vectorDistance = input.worldPosition - gLight1Position;
+    float3 light1Direction = normalize(gLight1Position.xyz - input.worldPosition);
+    float3 vectorDistance = input.worldPosition - gLight1Position.xyz;
     float3 light1Dist = length(vectorDistance);
 
-    float3 diffuseLight1 = gLight1Colour * max(dot(input.worldNormal, light1Direction), 0); // Equations from lighting lecture
+    float3 diffuseLight1 = gLight1Colour.xyz * max(dot(input.worldNormal, light1Direction), 0); // Equations from lighting lecture
 
     diffuseLight1 /= light1Dist;
 
@@ -46,7 +46,7 @@ float4 main(LightingPixelShaderInput input) : SV_Target
 
 
     // Light 2
-    float3 light2Vector = gLight2Position - input.worldPosition;
+    float3 light2Vector = gLight2Position.xyz - input.worldPosition;
     float3 light2Dist = length(light2Vector);
     float3 light2Direction = light2Vector / light2Dist;
     float3 diffuseLight2 = gLight2Colour * max(dot(input.worldNormal, light2Direction), 0) / light2Dist;
@@ -60,12 +60,12 @@ float4 main(LightingPixelShaderInput input) : SV_Target
 
     for (int i = 0; i < lightAmount; ++i)
 	{
-        float3 lightDirection = normalize(lightPositions[i] - input.worldPosition);
+        float3 lightDirection = normalize(lightPositions[i].xyz - input.worldPosition);
 
-        float3 vectorDistance = input.worldPosition - lightPositions[i];
+        float3 vectorDistance = input.worldPosition - lightPositions[i].xyz;
         float3 lightDist = length(vectorDistance);
 
-        float3 diffuseLight = lightColours[i] * max(dot(input.worldNormal, lightDirection), 0);
+        float3 diffuseLight = lightColours[i].xyz * max(dot(input.worldNormal, lightDirection), 0);
 
         diffuseLight /= lightDist;
 

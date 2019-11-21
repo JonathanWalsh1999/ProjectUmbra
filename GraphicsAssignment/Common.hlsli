@@ -97,21 +97,22 @@ struct PixelShaderInput
 
 cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer the number 0 - used in the C++ code
 {
-    const static int lightAmount = 1;
+    const static int lightAmount = 2;
 
     float4x4 gViewMatrix;
     float4x4 gProjectionMatrix;
     float4x4 gViewProjectionMatrix; // The above two matrices multiplied together to combine their effects
 
-    float3   gLight1Position; // 3 floats: x, y z
-    float    padding1;        // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
+    float4   gLight1Position; // 3 floats: x, y z
+    //float    padding1;        // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
                               // to the size of a float4 then HLSL (GPU) will insert padding, which can cause problems matching 
                               // structure between C++ and GPU. So add these unused padding variables to both HLSL and C++ structures.
-    float3   gLight1Colour;
-    float    padding2;
+    float4   gLight1Colour;
+    //float    padding2;
 
-    float3   gLight2Position;
+    float4   gLight2Position;
     //float    padding3;
+    float3 bigPad;
     float gParallaxDepth;
 
     float3   gLight2Colour;
@@ -128,15 +129,13 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
 
     float3 lightFacings;
     float lightCosHalfAngles;
+
     float4x4 lightViewMatrix;
     float4x4 lightProjectionMatrix;
 
     
     float4 lightPositions[lightAmount];
-    //float padding7[lightAmount];
-    float4 lightColours[lightAmount];
-   // float padding8[lightAmount];
-
+    float4 lightColours[lightAmount]; 
 
 
 
@@ -154,8 +153,8 @@ cbuffer PerModelConstants : register(b1) // The b1 gives this constant buffer th
 {
     float4x4 gWorldMatrix;
 
-    float3   gObjectColour;
-    float    padding6;  // See notes on padding in structure above
+    float4   gObjectColour;
+    //float    padding6;  // See notes on padding in structure above
 }
 
 

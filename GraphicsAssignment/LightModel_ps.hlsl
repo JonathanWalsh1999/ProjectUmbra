@@ -31,7 +31,7 @@ float4 main(SimplePixelShaderInput input) : SV_Target
     float3 diffuseMapColour = DiffuseMap.Sample(TexSampler, input.uv).rgb;
 
     // Blend texture colour with fixed per-object colour
-    float3 finalColour = gObjectColour * diffuseMapColour;
+    float3 finalColour = gObjectColour.xyz * diffuseMapColour;
 
     return float4(finalColour, 1.0f); // Always use 1.0f for alpha - no alpha blending in this lab
 }

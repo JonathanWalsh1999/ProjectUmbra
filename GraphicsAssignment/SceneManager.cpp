@@ -109,16 +109,16 @@ void CSceneManager::SetUpLighting()
 	EBlendingType newBlend = Add;
 
 	mLight1Strength = 100.0f;
-	mLight1Position = { 0.0f, 80.0f, -100.0f };
+	mLight1Position = { 0.0f, 80.0f, -100.0f, 0.0f };
 	mLight1ConeAngle = 90.0f;
-	mLight1Colour = { 1.0f, 1.0f, 1.0f };
+	mLight1Colour = { 1.0f, 1.0f, 1.0f,0.0f };
 
 	mAmbientColour = { 0.1f, 0.1f, 0.1f };
 	mSpecularPower = 256.0f;
 	mLightModelScale = 0.7f;
 
 	mLight2Strength = 40.0f;
-	mLight2Position = { 150.0f, 50.0f, 5000.0f };
+	mLight2Position = { 300.0f, 50.0f, 50.0f,0.0f };
 
 
 	mLight1 = myEngine->CreateLight();
@@ -185,7 +185,7 @@ void CSceneManager::PulsateLight(ILight* chosenLight, const float& lightStrength
 void CSceneManager::CycleLightColours(ILight* chosenLight)
 {	
 	struct SBoolCoords{ bool x, y, z; };
-	static CVector3 colourCycle = { 0.0f,0.5f,1.0f };
+	static CVector4 colourCycle = { 0.0f,0.5f,1.0f,0.0f };
 	static SBoolCoords colourCycleBools = { true, true, true };
 
 	//Cycle through each channel in RGB

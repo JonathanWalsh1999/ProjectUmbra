@@ -152,6 +152,7 @@ void CScene::RenderScene(float& frameTime)
 	mPerFrameConstants.cameraPosition = camera->Position();
 
 	RenderShadow(vp);
+
 	RenderDepthBufferFromLight(0);
 
 
@@ -162,14 +163,6 @@ void CScene::RenderScene(float& frameTime)
 	{
 		mEngine->GetAllLights()[i]->RenderLight();
 	}
-	//// Common settings for both main scene and portal scene ////
-
-	// Set up the light information in the constant buffer - this is the same for portal and main render
-	// Don't send to the GPU yet, the function RenderSceneFromCamera will do that
-	//g	PerFrameConstants.light1Colour = gLight1Colour * gLight1Strength;
-	//gPerFrameConstants.light1Position = light->Position();
-	//gPerFrameConstants.ambientColour = gAmbientColour;
-	//gPerFrameConstants.specularPower = gSpecularPower;
 
 
 	//// Main scene rendering ////
@@ -178,12 +171,13 @@ void CScene::RenderScene(float& frameTime)
 	// When finished the back buffer is sent to the "front buffer" - which is the monitor.
 	mBackBufferRenderTarget = mEngine->GetBackBufferRenderTarget();
 	mEngine->GetContext()->OMSetRenderTargets(1, &mBackBufferRenderTarget, mEngine->GetDepthStencil());
+	mEngine->GetContext()->ClearDepthStencilView(mEngine->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	mBackgroundColour = mEngine->GetBackgroundColour();
 
 	// Clear the back buffer to a fixed colour and the depth buffer to the far distance
 	mEngine->GetContext()->ClearRenderTargetView(mEngine->GetBackBufferRenderTarget(), &mBackgroundColour.r);
-	mEngine->GetContext()->ClearDepthStencilView(mEngine->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 
 	// Setup the viewport to the size of the main window
 	vp.Width = static_cast<FLOAT>(gViewportWidth);
@@ -193,10 +187,6 @@ void CScene::RenderScene(float& frameTime)
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
 	mEngine->GetContext()->RSSetViewports(1, &vp);
-
-
-
-
 
 
 	// Render the scene for the main window	
@@ -210,28 +200,16 @@ void CScene::RenderScene(float& frameTime)
 	mPointSampler = mEngine->GetPointSampler();
 	mEngine->GetContext()->PSSetShaderResources(2, 1, &mShadowMapSRV);
 	mEngine->GetContext()->PSSetSamplers(1, 1, &mPointSampler);	
-
-	//// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
 	RenderModels();
 
-
-
+	//// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
 	ID3D11ShaderResourceView* nullView = nullptr;
+	ID3D11SamplerState* nullSampler = nullptr;
 	mEngine->GetContext()->PSSetShaderResources(2, 1, &nullView);
-
-
-
-
-
-
+	mEngine->GetContext()->PSSetSamplers(1, 1, &nullSampler);
 
 	UpdateScene(frameTime);
-
-
-
-
 	mEngine->GetSwapChain()->Present(0, 0);
-
 }
 void CScene::RenderModels()
 {
@@ -251,6 +229,7 @@ void CScene::RenderModels()
 
 		// Select the approriate textures and sampler to use in the pixel shader
 		mEngine->GetContext()->PSSetShaderResources(0, 1, &currentDiffuseSpecularMapSRV); // First parameter must match texture slot number in the shader
+
 		if (mEngine->GetAllModels()[j]->GetDiffuseSRVMap2() != nullptr)
 		{
 			mEngine->GetContext()->PSSetShaderResources(1, 1, &secondaryDiffuseSpecularMapSRV);
@@ -438,11 +417,20 @@ void CScene::RenderDepthBufferFromLight(int lightIndex)
 	mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthBufferState(), 0);
 	mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
 
+
+	mAnisotropic4xSampler = mEngine->GetAnisotropic4xSampler();
+	mEngine->GetContext()->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
+	mPointSampler = mEngine->GetPointSampler();
+	mEngine->GetContext()->PSSetSamplers(1, 1, &mPointSampler);
+
+
+
 	// Render models - no state changes required between each object in this situation (no textures used in this step)
 	for (unsigned int i = 0; i < mEngine->GetAllModels().size(); ++i)
 	{
 		mEngine->GetAllModels()[i]->Render();
-	}
+	}		
+
 }
 
 void CScene::ReleaseResources()

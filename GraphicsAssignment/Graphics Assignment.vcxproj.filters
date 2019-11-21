@@ -50,6 +50,9 @@
     <ClCompile Include="Scene.cpp">
       <Filter>EngineFiles</Filter>
     </ClCompile>
+    <ClCompile Include="CVector4.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp">
@@ -124,6 +127,9 @@
     <ClInclude Include="IModel.hpp">
       <Filter>EngineFiles\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="CVector4.hpp">
+      <Filter>Maths</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -191,12 +197,6 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="BasicTransform_vs.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="test_ps.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="test_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="main_ps.hlsl">

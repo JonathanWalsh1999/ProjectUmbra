@@ -85,10 +85,10 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	
 	// Get the height info from the normal map's alpha channel at the given texture coordinate
 	// Rescale from 0->1 range to -x->+x range, x determined by ParallaxDepth setting
-    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.modelTangent).a - 0.5f);
+    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.modelTangent.xy).a - 0.5f);
 	
 	// Use the depth of the texture to offset the given texture coordinate - this corrected texture coordinate will be used from here on
-    float2 offsetTexCoord = input.modelTangent + textureHeight * textureOffsetDir;
+    float2 offsetTexCoord = input.modelTangent.xy + textureHeight * textureOffsetDir;
 
 
 	//*******************************************
@@ -114,21 +114,21 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     // Lighting equations
 
     // Light 1
-    float3 light1Vector = gLight1Position - input.worldPosition;
+    float3 light1Vector = gLight1Position.xyz - input.worldPosition;
     float light1Distance = length(light1Vector);
     float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
-    float3 diffuseLight1 = gLight1Colour * max(dot(worldNormal, light1Direction), 0) / light1Distance;
+    float3 diffuseLight1 = gLight1Colour.xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
     float3 halfway = normalize(light1Direction + cameraDirection);
     float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
 
     //SPOT LIGHT
     // Light 2
-    float3 light2Vector = lightPositions[0] - input.worldPosition;
+    float3 light2Vector = lightPositions[0].xyz - input.worldPosition;
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
 
-    float3 diffuseLight2 = lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+    float3 diffuseLight2 = lightColours[0].xyz * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
     //halfway = normalize(light2Direction + cameraDirection);
     float3 specularLight2 = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
@@ -159,8 +159,8 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 		// to the light than this pixel - so the pixel gets no effect from this light
         if (1)//      depthFromLight < ShadowMapLight1.Sample(PointClamp, shadowMapUV).r)
         {
-            float3 light1Dist = length(lightPositions[0] - input.worldPosition);
-            diffuseLight2 = lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
+            float3 light1Dist = length(lightPositions[0].xyz - input.worldPosition);
+            diffuseLight2 = lightColours[0].xyz * max(dot(input.modelNormal, light2Direction), 0) / light1Dist; // Equations from lighting lecture
             halfway = normalize(light2Direction + cameraDirection);
             specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
         }

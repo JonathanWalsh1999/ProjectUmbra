@@ -60,12 +60,12 @@ private:
 
 	//Light variables
 	float mLight1Strength;
-	CVector3 mLight1Colour;
-	CVector3 mLight1Position;
+	CVector4 mLight1Colour;
+	CVector4 mLight1Position;
 	float mLight1ConeAngle;
 
 	float mLight2Strength;
-	CVector3 mLight2Position;
+	CVector4 mLight2Position;
 
 	CVector3 mAmbientColour;
 	float mSpecularPower;

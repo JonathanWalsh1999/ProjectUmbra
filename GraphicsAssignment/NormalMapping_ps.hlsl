@@ -64,7 +64,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	// Get the texture normal from the normal map. The r,g,b pixel values actually store x,y,z components of a normal. However, r,g,b
 	// values are stored in the range 0->1, whereas the x, y & z components should be in the range -1->1. So some scaling is needed
 
-    float3 textureNormal = 2.0f * NormalMap.Sample(TexSampler, input.modelTangent).rgb - 1.0f; // Scale from 0->1 to -1->1
+    float3 textureNormal = 2.0f * NormalMap.Sample(TexSampler, input.modelTangent.xy).rgb - 1.0f; // Scale from 0->1 to -1->1
 
 	// Now convert the texture normal into model space using the inverse tangent matrix, and then convert into world space using the world
 	// matrix. Normalise, because of the effects of texture filtering and in case the world matrix contains scaling
@@ -78,20 +78,20 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     float3 cameraDirection = normalize(gCameraPosition - input.worldPosition);
 
     // Light 1
-    float3 light1Vector = gLight1Position - input.worldPosition;
+    float3 light1Vector = gLight1Position.xyz - input.worldPosition;
     float light1Distance = length(light1Vector);
     float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
-    float3 diffuseLight1 = gLight1Colour * max(dot(worldNormal, light1Direction), 0) / light1Distance;
+    float3 diffuseLight1 = gLight1Colour.xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
     float3 halfway = normalize(light1Direction + cameraDirection);
     float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
 
 
     // Light 2
-    float3 light2Vector = lightPositions[0] - input.worldPosition;
+    float3 light2Vector = lightPositions[0].xyz - input.worldPosition;
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
-    float3 diffuseLight2 = lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+    float3 diffuseLight2 = lightColours[0].xyz * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
     halfway = normalize(light2Direction + cameraDirection);
     float3 specularLight2 = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
@@ -100,7 +100,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
     // Sample diffuse material colour for this pixel from a texture using a given sampler that you set up in the C++ code
     // Ignoring any alpha in the texture, just reading RGB
-    float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, input.modelTangent);
+    float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, input.modelTangent.xy);
     float3 diffuseMaterialColour = textureColour.rgb;
     float specularMaterialColour = textureColour.a;
 

@@ -28,7 +28,7 @@ PixelShaderInput main(BasicVertex modelVertex)
     output.projectedPosition = mul(gProjectionMatrix, viewPosition);
 
     // Temporary lines, replace each with the full lighting code as you do the lab exercise
-    float4 worldLightVector = float4(gLight1Position - worldPosition, padding1); //vector from vertex to light
+    float4 worldLightVector = float4(gLight1Position.xyz - worldPosition.xyz, gLight1Colour.w); //vector from vertex to light
     worldLightVector = normalize(worldLightVector);
     float4 worldLightVector2 = float4(lightPositions[0] - worldPosition); //vector from vertex to light
     worldLightVector2 = normalize(worldLightVector2);
@@ -36,15 +36,15 @@ PixelShaderInput main(BasicVertex modelVertex)
     float4 dotProduct = dot(worldNormal, worldLightVector); //dotproduct between vertex normal and vertex to light
     float4 dotProduct2 = dot(worldNormal, worldLightVector2); //dotproduct between vertex normal and vertex to light
 
-    float3 distance = worldPosition - gLight1Position; //Distance between vertex and light
+    float3 distance = worldPosition.xyz - gLight1Position.xyz; //Distance between vertex and light
     distance = normalize(distance);
-    float3 distance2 = worldPosition - lightPositions[0]; //Distance between vertex and light
+    float3 distance2 = worldPosition.xyz - lightPositions[0].xyz; //Distance between vertex and light
     distance2 = normalize(distance2);
 
     //float3 attenuated = gLight1Colour  / 1; //Attenuated light
 
 
-    output.diffuseLight = /*(gLight1Colour * max(dotProduct, 0)) */ /*+ (lightColours[0] * max(dotProduct2, 0))*/+ /*gAmbientColour*/(0.25f, 0.25f,0.25f); //Diffuse light equation
+    output.diffuseLight = /*(gLight1Colour * max(dotProduct, 0)) */ /*+ (lightColours[0] * max(dotProduct2, 0))*/+ /*gAmbientColour*/float3(0.25f, 0.25f,0.25f); //Diffuse light equation
 
 
     float4 cameraVector = (worldNormal - viewPosition);

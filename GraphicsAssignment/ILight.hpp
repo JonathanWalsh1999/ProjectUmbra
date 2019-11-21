@@ -15,15 +15,15 @@ public:
 
 	virtual IMesh* GetMesh() = 0;
 	virtual IModel* GetModel() = 0;
-	virtual CVector3 GetPosition() = 0;
-	virtual CVector3 GetColour() = 0;
+	virtual CVector4 GetPosition() = 0;
+	virtual CVector4 GetColour() = 0;
 	virtual float GetSpecularPower() = 0;
 	virtual CVector3 GetAmbientColour() = 0;
 	virtual float GetLightStrength() = 0;
-	virtual float GetLightNumber() = 0;
+	virtual int GetLightNumber() = 0;
 
-	virtual void SetPosition(const CVector3& newPos) = 0;
-	virtual void SetLightColour(const CVector3& newColour) = 0;
+	virtual void SetPosition(const CVector4& newPos) = 0;
+	virtual void SetLightColour(const CVector4& newColour) = 0;
 	virtual void SetSpecularPower(const float& newSpecularPower) = 0;
 	virtual void SetAmbientColour(const CVector3& newAmbientColour) = 0;
 	virtual void SetLightStrength(const float& newLightStrength) = 0;

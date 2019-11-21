@@ -1,0 +1,4 @@
+﻿  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\BasicTransform_vs.cso
+F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\DepthOnly_ps.hlsl(16,36-40): error X4502: Shader model ps_4_0_level_9_3 doesn't allow reading from position semantics.
+  
+  compilation failed; no code produced

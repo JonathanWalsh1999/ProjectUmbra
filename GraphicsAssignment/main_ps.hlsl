@@ -5,7 +5,6 @@
 
 #include "Common.hlsli" // Shaders can also use include files - note the extension
 
-
 //--------------------------------------------------------------------------------------
 // Textures (texture maps)
 //--------------------------------------------------------------------------------------
@@ -24,11 +23,11 @@ float PCF(int sampleSize, float lightDepth, float2 shadowUVCoords)
     float shadow = 0.0f;
     float offSet = 1.0f / 1024; //How much each sample will diverage from map
         
-    for (int x = 0; x < sampleSize; ++x)
+    [unroll] for (int x = 0; x < sampleSize; ++x)
     {
-        for (int y = 0; y < sampleSize; ++y)
+        [unroll] for (int y = 0; y < sampleSize; ++y)
         {
-            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet).r);
+            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet) ).r;
             if (lightDepth < pcfDepth)//Checks the light depth against the sample calculated from an offest from shadow map
             {
                 shadow += 1.0f;
@@ -43,11 +42,11 @@ float ZBuffer(float lightDepth, float2 shadowUVCoords)
 {
     float shadowMapDepthValue = ShadowMapLight1.Sample(PointClamp, shadowUVCoords).r;
 
-    if (lightDepth < shadowMapDepthValue)
+    if (lightDepth > shadowMapDepthValue)
     {
-        return shadowMapDepthValue;
+         shadowMapDepthValue = 0.0f;
     }
-    return 0.0f;
+    return shadowMapDepthValue;
 }
 
 float4 main(NormalMappingPixelShaderInput input) : SV_Target
@@ -119,10 +118,10 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     // Lighting equations
 
     // Light 1
-    float3 light1Vector = gLight1Position - input.worldPosition;
+    float3 light1Vector = lightPositions[1].xyz - input.worldPosition;
     float light1Distance = length(light1Vector);
     float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
-    float3 diffuseLight1 = gLight1Colour * max(dot(worldNormal, light1Direction), 0) / light1Distance;
+    float3 diffuseLight1 = lightColours[1].xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
     float3 halfway = normalize(light1Direction + cameraDirection);
     float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
@@ -137,8 +136,6 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
     //halfway = normalize(light2Direction + cameraDirection);
     float3 specularLight2 = 0.0f; // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
-    //
-
 
     const float DepthAdjust = 0.0005f;
     // Check if pixel is within light cone
@@ -168,21 +165,13 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
         {
             shadow = PCF(4, depthFromLight, shadowMapUV);
         }
-
+        
         float3 light1Dist = length(lightPositions[0].xyz - input.worldPosition);
         diffuseLight2 = (lightColours[0].xyz * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * shadow; // Equations from lighting lecture
         halfway = normalize(light2Direction + cameraDirection);
         specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
          
     }
-    //
-
-    
-
-
-
-
-
     // Sample diffuse material colour for this pixel from a texture using a given sampler that you set up in the C++ code
     // Ignoring any alpha in the texture, just reading RGB
     float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, offsetTexCoord); // Use offset texture coordinate from parallax mapping

@@ -25,11 +25,11 @@ float PCF(int sampleSize, float lightDepth, float2 shadowUVCoords)
     float shadow = 0.0f;
     float offSet = 1.0f / 1024;//How much each sample will diverage from map
         
-    for (int x = 0; x < sampleSize; ++x)
+    [unroll] for (int x = 0; x < sampleSize; ++x)
     {
-        for (int y = 0; y < sampleSize; ++y)
+        [unroll] for (int y = 0; y < sampleSize; ++y)
         {
-            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet).r);
+            float pcfDepth = ShadowMapLight1.Sample(PointClamp, shadowUVCoords + float2(x * offSet, y * offSet) ).r;
             if (lightDepth < pcfDepth)//Checks the light depth against the sample calculated from an offest from shadow map
             {
                 shadow += 1.0f;
@@ -110,24 +110,24 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     // Lighting equations
 
     // Light 1
-    float3 light1Vector = gLight1Position - input.worldPosition;
+    float3 light1Vector = gLight1Position.xyz - input.worldPosition;
     float light1Distance = length(light1Vector);
     float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
-    float3 diffuseLight1 = gLight1Colour * max(dot(worldNormal, light1Direction), 0) / light1Distance;
+    float3 diffuseLight1 = gLight1Colour.xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
     float3 halfway = normalize(light1Direction + cameraDirection);
     float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
 
     //SPOT LIGHT
     // Light 2
-    float3 light2Vector = lightPositions[0] - input.worldPosition;
+    float3 light2Vector = lightPositions[0].xyz - input.worldPosition;
     float light2Distance = length(light2Vector);
     float3 light2Direction = light2Vector / light2Distance;
 
-    float3 diffuseLight2 = (0.0f, 0.0f, 0.0f); //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+    float3 diffuseLight2 = float3(0.0f, 0.0f, 0.0f); //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
     //halfway = normalize(light2Direction + cameraDirection);
-    float3 specularLight2 = (0.0f, 0.0f, 0.0f); // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    float3 specularLight2 = float3(0.0f, 0.0f, 0.0f); // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
     //
 
 
@@ -155,9 +155,9 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 
 
 
-        float3 light1Dist = length(lightPositions[0] - input.worldPosition);
+        float3 light1Dist = length(lightPositions[0].xyz - input.worldPosition);
         // Equations from lighting lecture and * the shadow using PCF
-        diffuseLight2 += (lightColours[0] * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * PCF(4, depthFromLight, shadowMapUV); 
+        diffuseLight2 += (lightColours[0].xyz * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * PCF(4, depthFromLight, shadowMapUV); 
         halfway = normalize(light2Direction + cameraDirection);
         specularLight2 += diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower);    
 

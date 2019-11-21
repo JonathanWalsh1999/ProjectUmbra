@@ -21,15 +21,15 @@ Light::~Light() {}
 
 IMesh* Light::GetMesh() { return lightMesh; }
 IModel* Light::GetModel() { return lightModel; }
-CVector3 Light::GetPosition() { return mLightPosition; }
-CVector3 Light::GetColour() { return mLightColour; }
+CVector4 Light::GetPosition() { return mLightPosition; }
+CVector4 Light::GetColour() { return mLightColour; }
 float Light::GetSpecularPower() { return mSpecularPower; }
 CVector3 Light::GetAmbientColour() { return mAmbientColour; }
 float Light::GetLightStrength() { return mLightStrength; }
-float Light::GetLightNumber() { return mLightNumber; }
+int Light::GetLightNumber() { return mLightNumber; }
 
-void Light::SetPosition(const CVector3& newPos) { mLightPosition = newPos; }
-void Light::SetLightColour(const CVector3& newColour)
+void Light::SetPosition(const CVector4& newPos) { mLightPosition = newPos; }
+void Light::SetLightColour(const CVector4& newColour)
 {
 	mLightColour = newColour;
 
@@ -48,8 +48,8 @@ void Light::RenderLight()
 	mPerModelConstants = myEngine->GetModelConstants();
 	if (mLightNumber == 1)
 	{
-		mPerFrameConstants.light1Colour = mLightColour * mLightStrength;
-		mPerFrameConstants.light1Position = mLightPosition;
+		mPerFrameConstants.lightColours[1] = mLightColour * mLightStrength;
+		mPerFrameConstants.lightPositions[1] = mLightPosition;
 
 		myEngine->SetFrameConstants(mPerFrameConstants);
 	}

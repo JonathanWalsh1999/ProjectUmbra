@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+#include "CVector4.hpp"
 #include "CVector3.hpp"
 #include "CVector2.hpp"
 
@@ -42,49 +43,48 @@
 	// we have finished updating the scene. There is a structure in the shader code that exactly matches this one
 	struct PerFrameConstants
 	{	
-		const static int lightAmount = 1;
+		const static int lightAmount = 2;//statics work differently therefore padding isn't neccessary here
 
 		// These are the matrices used to position the camera
 		CMatrix4x4 viewMatrix;
 		CMatrix4x4 projectionMatrix;
 		CMatrix4x4 viewProjectionMatrix; // The above two matrices multiplied together to combine their effects
 
-		CVector3   light1Position; // 3 floats: x, y z
-		float      padding1;      // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
+		//**Individual light variables will probably become obsolete due to the addition of the arrays at the bottom. Delete CAREFULLY when ready - Ensure in blocks of 4
+		CVector4   light1Position; // 3 floats: x, y z
+								  // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
 								  // to the size of a float4 then HLSL (GPU) will insert padding, which can cause problems matching 
 								  // structure between C++ and GPU. So add these unused padding variables to both HLSL and C++ structures.
-		CVector3   light1Colour;
-		float      padding2;
+		CVector4   light1Colour;
 
-		CVector3   light2Position;
-		//float      padding3;
+		CVector4   light2Position;
+
+		CVector3      padding3;
 		float gParallaxDepth;
 
 		CVector3   light2Colour;
-		//float      padding4;
 		float blendAmount;
+		//**
 
 		CVector3   ambientColour;
 		float      specularPower;  // In this case we actually have a useful float variable that we can use to pad to a float4
 
-		CVector3   cameraPosition;
-	//	float      padding5;
-
-		//float wiggle;
+		CVector3   cameraPosition;	
 		int shadowEffect;//Each shadow effect will have a number assigned to them, so that it will be easy to change on demand in C++. e.g. z-buffer = 0 pcf = 1 etc.
 
 		CVector3 lightFacings;
 		float lightCosHalfAngles;
+
 		CMatrix4x4 lightViewMatrix;
 		CMatrix4x4 lightProjectionMatrix;
 
 
 
-		//Attempt at having multiple lights but not successful... yet
-		CVector3 lightPositions[lightAmount];
-		float padding7[lightAmount];
-		CVector3 lightColours[lightAmount];
-		float padding8[lightAmount];
+		//Had to implement a CVector4 based on CVector3 as shaders only like getting stuff in chunks of 4 (16 bytes - 4 per var e.g. float = 4 bytes * 4 = 16)
+		CVector4 lightPositions[lightAmount];
+
+		CVector4 lightColours[lightAmount];
+
 
 	};
 
@@ -94,8 +94,8 @@
 	struct PerModelConstants
 	{
 		CMatrix4x4 worldMatrix;
-		CVector3   objectColour; // Allows each light model to be tinted to match the light colour they cast
-		float      padding6;
+		CVector4   objectColour; // Allows each light model to be tinted to match the light colour they cast
+		//float      padding6;
 	};
 
 	//temp globals
