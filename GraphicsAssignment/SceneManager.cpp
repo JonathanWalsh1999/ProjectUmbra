@@ -117,19 +117,20 @@ void CSceneManager::SetUpLighting()
 	mSpecularPower = 256.0f;
 	mLightModelScale = 0.7f;
 
-	mLight2Strength = 40.0f;
+	mLight2Strength = 10.0f;
 	mLight2Position = { 300.0f, 50.0f, 50.0f,0.0f };
 
+	mLight3Position = { -300.0f, 50.0f, 50.0f, 0.0f };
 
-	mLight1 = myEngine->CreateLight();
+
+	mLight1 = myEngine->CreateLight(Spot);
 	mLight1->SetAmbientColour(mAmbientColour);
 	mLight1->SetLightColour(mLight1Colour);
-	mLight1->SetLightNumber(0);
+
 	mLight1->SetLightStrength(mLight1Strength);
 	mLight1->SetSpecularPower(mSpecularPower);
 	mLight1->SetPosition(mLight1Position);
 	mLight1->SetLightAngle(mLight1ConeAngle);
-	//mLight1->AddToVector();
 	mLightMesh = myEngine->LoadMesh(mLightMeshFile);
 	mLight1->SetMesh(mLightMesh);
 	mLightModel1 = mLightMesh->CreateModel(mLightTextureFile, mLight1->GetPosition().x, mLight1->GetPosition().y,
@@ -140,9 +141,9 @@ void CSceneManager::SetUpLighting()
 	mLight1->SetModel(mLightModel1);
 	lights.push_back(mLight1);
 
-	mLight2 = myEngine->CreateLight();
+	mLight2 = myEngine->CreateLight(Point);
 	mLight2->SetAmbientColour(mAmbientColour);
-	mLight2->SetLightNumber(1);
+
 	mLight2->SetLightStrength(mLight1Strength);
 	mLight2->SetSpecularPower(mSpecularPower);
 	mLight2->SetPosition(mLight2Position);
@@ -155,6 +156,26 @@ void CSceneManager::SetUpLighting()
 	mLight2->SetModel(mLightModel2);
 	//mLight2->AddToVector();
 	lights.push_back(mLight2);
+
+	mLight3 = myEngine->CreateLight(Point);
+	mLight3->SetLightColour({1.0f, 1.0f,1.0f,0.0f});
+	mLightModel3 = mLightMesh->CreateModel(mLightTextureFile, mLight3->GetPosition().x, mLight3->GetPosition().y,
+		mLight3->GetPosition().z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mLightModel3->SetAddBlend(newBlend);
+	mLightModel3->SetScale(pow(mLight3->GetLightStrength(), mLightModelScale));
+	mLight3->SetModel(mLightModel3);
+
+
+	mLight3->SetAmbientColour(mAmbientColour);
+
+	mLight3->SetLightStrength(mLight1Strength);
+	mLight3->SetSpecularPower(mSpecularPower);
+	mLight3->SetPosition(mLight3Position);
+
+
+
+	lights.push_back(mLight3);
+
 }
 
 void CSceneManager::PulsateLight(ILight* chosenLight, const float& lightStrength)

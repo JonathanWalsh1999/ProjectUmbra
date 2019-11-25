@@ -47,7 +47,7 @@ public:
 	// State creation / destruction
 	//--------------------------------------------------------------------------------------
 
-	ILight* CreateLight();
+	ILight* CreateLight(ELightType type);
 	// Create all the states used in this app, returns true on success
 	bool CreateStates();
 

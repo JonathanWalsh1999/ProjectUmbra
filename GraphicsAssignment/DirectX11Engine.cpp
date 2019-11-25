@@ -599,9 +599,21 @@ void CDX11Engine::ReleaseStates()
 	if (mPointSampler)           mPointSampler->Release();
 }
 
-ILight* CDX11Engine::CreateLight()
+ILight* CDX11Engine::CreateLight(ELightType type)
 {	
-	return new Light(this);
+	try
+	{
+		ILight* newLight = new Light(this, type);
+		return newLight;
+	}
+	catch (std::exception& e)
+	{
+		std::string s = e.what();
+		std::wstring str = std::wstring(s.begin(), s.end());
+
+		MessageBox(GetHWnd(), str.c_str(), NULL, MB_OK);
+	}
+	return nullptr;
 }
 
 

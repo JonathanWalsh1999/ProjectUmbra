@@ -69,7 +69,7 @@ public:
 	// State creation / destruction
 	//--------------------------------------------------------------------------------------
 
-	virtual ILight* CreateLight() = 0;
+	virtual ILight* CreateLight(ELightType type) = 0;
 	// Create all the states used in this app, returns true on success
 	virtual bool CreateStates() = 0;
 

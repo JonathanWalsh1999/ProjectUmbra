@@ -97,45 +97,42 @@ struct PixelShaderInput
 
 cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer the number 0 - used in the C++ code
 {
-    const static int lightAmount = 2;
+    const static int MAX_LIGHTS = 3;
 
     float4x4 gViewMatrix;
     float4x4 gProjectionMatrix;
     float4x4 gViewProjectionMatrix; // The above two matrices multiplied together to combine their effects
 
     float4   gLight1Position; // 3 floats: x, y z
-    //float    padding1;        // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
+                               // IMPORTANT technical point: shaders work with float4 values. If constant buffer variables don't align
                               // to the size of a float4 then HLSL (GPU) will insert padding, which can cause problems matching 
                               // structure between C++ and GPU. So add these unused padding variables to both HLSL and C++ structures.
     float4   gLight1Colour;
-    //float    padding2;
 
     float4   gLight2Position;
-    //float    padding3;
-    float3 bigPad;
+
+    float2 bigPad;
     float gParallaxDepth;
+    int lightCount;
 
     float3   gLight2Colour;
-    //float    padding4;
     float blendAmount;
 
     float3   gAmbientColour;
     float    gSpecularPower;  // In this case we actually have a useful float variable that we can use to pad to a float4
 
     float3   gCameraPosition;
-  //  float    padding5;
-    //float wiggle;
     int shadowEffect;//Each shadow effect will have a number assigned to them, so that it will be easy to change on demand in C++. e.g. z-buffer = 0 pcf = 1 etc.
 
-    float3 lightFacings;
-    float lightCosHalfAngles;
+    float4 lightFacings[MAX_LIGHTS];
+    //float lightCosHalfAngles; //Now been moved into above variable
 
-    float4x4 lightViewMatrix;
-    float4x4 lightProjectionMatrix;
+    float4x4 lightViewMatrix[MAX_LIGHTS];
+    float4x4 lightProjectionMatrix[MAX_LIGHTS];
 
     
-    float4 lightPositions[lightAmount];
-    float4 lightColours[lightAmount]; 
+    float4 lightPositions[MAX_LIGHTS];
+    float4 lightColours[MAX_LIGHTS];
 
 
 

@@ -28,12 +28,11 @@ public:
 	virtual void SetAmbientColour(const CVector3& newAmbientColour) = 0;
 	virtual void SetLightStrength(const float& newLightStrength) = 0;
 	virtual void SetLightNumber(const int& newLightNumber) = 0;
-	virtual void SetLightFacing(const CVector3& localZ) = 0;
 	virtual void SetLightAngle(const float& angle) = 0;
 	virtual void SetMesh(IMesh* newMesh) = 0;
 	virtual void SetModel(IModel* newModel) = 0;
 
 	virtual void RenderLight() = 0;
-	virtual void RenderDepthBufferFromLight(std::vector<IModel*> allShadowModels) = 0;
+
 
 };

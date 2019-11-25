@@ -3,13 +3,12 @@
 
 class IScene;
 class IEngine;
-class Model;
-class Mesh;
+
 
 class Light : public ILight
 {
 public:
-	Light(IEngine * engine);
+	Light(IEngine * engine, ELightType light);
 	~Light();
 
 	IMesh* GetMesh();
@@ -27,13 +26,12 @@ public:
 	void SetAmbientColour(const CVector3& newAmbientColour);
 	void SetLightStrength(const float& newLightStrength);
 	void SetLightNumber(const int& newLightNumber);
-	void SetLightFacing(const CVector3& localZ);
 	void SetLightAngle(const float& angle);
 	void SetMesh(IMesh* newMesh);
 	void SetModel(IModel* newModel);
 
 	void RenderLight();
-	void RenderDepthBufferFromLight(std::vector<IModel*> allShadowModels);
+
 
 private:
 	IEngine * myEngine;
@@ -46,8 +44,9 @@ private:
 	float mSpecularPower = 0;
 	CVector3 mAmbientColour{ 0,0,0 };
 	float mLightStrength = 0;
-	int mLightNumber;
-
+	static int mLightCount;
+	int mLightIndex;
+	ELightType mLightType;
 	float coneAngle;
 
 

@@ -5,16 +5,24 @@
 
 #include "Model.hpp"
 
+int Light::mLightCount = 0;
 
 
-
-Light::Light(IEngine * engine)
+Light::Light(IEngine * engine, ELightType type)
 { 
 	myEngine = engine;
-
+	mLightType = type;
 	mPSShader = LoadPixelShader("main_ps", myEngine);
 	mVSShader = LoadVertexShader("main_vs", myEngine);
 	myScene = myEngine->GetScene();
+	mLightIndex = mLightCount;
+	mLightCount += 1;
+	if (mLightCount > PerFrameConstants::MAX_LIGHTS)
+	{
+		std::string str = "Max lights reached. Max= " + std::to_string(PerFrameConstants::MAX_LIGHTS);
+		throw std::runtime_error(str);
+	}
+
 	mPerFrameConstants = myScene->GetFrameConstants();
 }
 Light::~Light() {}
@@ -26,7 +34,7 @@ CVector4 Light::GetColour() { return mLightColour; }
 float Light::GetSpecularPower() { return mSpecularPower; }
 CVector3 Light::GetAmbientColour() { return mAmbientColour; }
 float Light::GetLightStrength() { return mLightStrength; }
-int Light::GetLightNumber() { return mLightNumber; }
+int Light::GetLightNumber() { return mLightCount; }
 
 void Light::SetPosition(const CVector4& newPos) { mLightPosition = newPos; }
 void Light::SetLightColour(const CVector4& newColour)
@@ -34,46 +42,56 @@ void Light::SetLightColour(const CVector4& newColour)
 	mLightColour = newColour;
 
 }
-void Light::SetSpecularPower(const float& newSpecularPower) { mSpecularPower = newSpecularPower; }
-void Light::SetAmbientColour(const CVector3& newAmbientColour) { mAmbientColour = newAmbientColour; }
-void Light::SetLightStrength(const float& newLightStrength) { mLightStrength = newLightStrength; }
-void Light::SetLightNumber(const int& newLightNumber) { mLightNumber = newLightNumber; }
-void Light::SetMesh(IMesh* newMesh) { lightMesh = newMesh; }
-void Light::SetModel(IModel* newModel) { lightModel = newModel; }
+void Light::SetSpecularPower(const float& newSpecularPower) 
+{ 
+	mSpecularPower = newSpecularPower; 
+}
+void Light::SetAmbientColour(const CVector3& newAmbientColour) 
+{ 
+	mAmbientColour = newAmbientColour; 
+}
+void Light::SetLightStrength(const float& newLightStrength) 
+{ 
+	mLightStrength = newLightStrength; 
+}
+void Light::SetLightNumber(const int& newLightNumber) 
+{ 
+	//mLightNumber = newLightNumber; 
+}
+
+void Light::SetMesh(IMesh* newMesh) 
+{ 
+	lightMesh = newMesh; 
+}
+void Light::SetModel(IModel* newModel) 
+{ 
+	lightModel = newModel; 
+}
 
 
 void Light::RenderLight()
 {
 	mPerFrameConstants = myScene->GetFrameConstants();
 	mPerModelConstants = myEngine->GetModelConstants();
-	if (mLightNumber == 1)
-	{
-		mPerFrameConstants.lightColours[1] = mLightColour * mLightStrength;
-		mPerFrameConstants.lightPositions[1] = mLightPosition;
 
-		myEngine->SetFrameConstants(mPerFrameConstants);
-	}
+	mPerFrameConstants.lightCount = mLightCount;
+	mPerFrameConstants.lightColours[mLightIndex] = mLightColour * mLightStrength;
+	mPerFrameConstants.lightColours[mLightIndex].w = static_cast<float>(mLightType);//Pass the light type to shaders, 
+	mPerFrameConstants.lightPositions[mLightIndex] = mLightPosition;				//so they know what sort of lighting to do e.g. point, spot etc.
 
-	if (mLightNumber == 0)
-	{
-		mPerFrameConstants.lightColours[0] = mLightColour * mLightStrength;
-		mPerFrameConstants.lightPositions[0] = mLightPosition;
+	//View matrix for spotlight
+	CMatrix4x4 lightViewMatrix = InverseAffine(lightModel->WorldMatrix());
+	//projection matrix
+	CMatrix4x4 lightProjectionMatrix = myEngine->MakeProjectionMatrix(1.0f, ToRadians(coneAngle));
 
-		myScene->SetFrameConstants(mPerFrameConstants);
+	CVector3 lightFacings3 = { mPerFrameConstants.lightFacings[mLightIndex].x, mPerFrameConstants.lightFacings[mLightIndex].y , mPerFrameConstants.lightFacings[mLightIndex].z };
 
-		//View matrix for spotlight
-		CMatrix4x4 lightViewMatrix = InverseAffine(this->lightModel->WorldMatrix());
-		//projection matrix
-		CMatrix4x4 lightProjectionMatrix = myEngine->MakeProjectionMatrix(1.0f, ToRadians(coneAngle));
-
-		mPerFrameConstants.lightFacings = Normalise(this->lightModel->WorldMatrix().GetZAxis());
-		mPerFrameConstants.lightCosHalfAngles = cos(ToRadians(coneAngle / 2));
-		mPerFrameConstants.lightViewMatrix = lightViewMatrix;
-		mPerFrameConstants.lightProjectionMatrix = lightProjectionMatrix;
-
-		myScene->SetFrameConstants(mPerFrameConstants);
-	}
-
+	lightFacings3 = Normalise(lightModel->WorldMatrix().GetZAxis());
+	mPerFrameConstants.lightFacings[mLightIndex] = { lightFacings3.x, lightFacings3.y, lightFacings3.z, 0 };
+	mPerFrameConstants.lightFacings[mLightIndex].w = cos(ToRadians(coneAngle / 2));
+	mPerFrameConstants.lightViewMatrix[mLightIndex] = lightViewMatrix;
+	mPerFrameConstants.lightProjectionMatrix[mLightIndex] = lightProjectionMatrix;
+	
 	mPerModelConstants.objectColour = mLightColour;
 	myEngine->SetModelConstants(mPerModelConstants);
 	mPerFrameConstants.ambientColour = mAmbientColour;
@@ -81,48 +99,7 @@ void Light::RenderLight()
 	myScene->SetFrameConstants(mPerFrameConstants);
 }
 
-// Render the scene from the given light's point of view. Only renders depth buffer
-void Light::RenderDepthBufferFromLight(std::vector<IModel*> allShadowModels)
-{
-	//UPDATE ONCE PER FRAME
-	mPerFrameConstants = myEngine->GetFrameConstants();
-	mPerFrameConstantBuffer = myEngine->GetFrameConstantBuffer();
 
-
-	// Get camera-like matrices from the spotlight, seet in the constant buffer and send over to GPU
-	mPerFrameConstants.viewMatrix = InverseAffine(this->lightModel->WorldMatrix());
-	mPerFrameConstants.projectionMatrix = myEngine->MakeProjectionMatrix(1.0f, ToRadians(coneAngle));
-	mPerFrameConstants.viewProjectionMatrix = myEngine->GetFrameConstants().viewMatrix * myEngine->GetFrameConstants().projectionMatrix;
-	myScene->SetFrameConstants(mPerFrameConstants);
-	myEngine->UpdateConstantBuffer(myEngine->GetFrameConstantBuffer(), mPerFrameConstants);
-
-
-	// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-	myEngine->GetContext()->VSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
-	myEngine->GetContext()->PSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer);
-
-	// Use special depth-only rendering shaders
-	myEngine->GetContext()->VSSetShader(mVSShader, nullptr, 0);
-	myEngine->GetContext()->PSSetShader(mPSShader, nullptr, 0);
-
-	// States - no blending, normal depth buffer and culling
-	myEngine->GetContext()->OMSetBlendState(myEngine->GetNoBlendState(), nullptr, 0xffffff);
-	myEngine->GetContext()->OMSetDepthStencilState(myEngine->GetDepthBufferState(), 0);
-	myEngine->GetContext()->RSSetState(myEngine->GetCullBackState());
-
-	for (unsigned int i = 0; i < allShadowModels.size(); ++i)
-	{
-		allShadowModels[i]->Render();
-	}
-	
-}
-
-
-
-void Light::SetLightFacing(const CVector3& localZ)
-{
-
-}
 void Light::SetLightAngle(const float& angle)
 {
 	coneAngle = angle;

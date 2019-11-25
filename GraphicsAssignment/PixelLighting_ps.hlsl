@@ -58,7 +58,7 @@ float4 main(LightingPixelShaderInput input) : SV_Target
 	float3 totalSpecularLight = 0;
 
 
-    for (int i = 0; i < lightAmount; ++i)
+    for (int i = 0; i < lightCount; ++i)
 	{
         float3 lightDirection = normalize(lightPositions[i].xyz - input.worldPosition);
 

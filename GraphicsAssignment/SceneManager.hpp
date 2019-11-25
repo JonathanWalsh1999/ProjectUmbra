@@ -52,10 +52,12 @@ private:
 	IModel* mSmoke;
 	IModel* mLightModel1;
 	IModel* mLightModel2;
+	IModel* mLightModel3;
 
 	//Create Lights
 	ILight* mLight1; //Spotlight
 	ILight* mLight2; //Point light
+	ILight* mLight3; //Point Light
 	std::vector<ILight*> lights;
 
 	//Light variables
@@ -66,6 +68,8 @@ private:
 
 	float mLight2Strength;
 	CVector4 mLight2Position;
+
+	CVector4 mLight3Position;
 
 	CVector3 mAmbientColour;
 	float mSpecularPower;
@@ -132,6 +136,7 @@ private:
 	IScene* myScene;
 
 	EShadowEffect myShadow;
+
 	KeyCode toZBuffer = Key_1;
 	KeyCode toPCF = Key_2;
 };

@@ -25,6 +25,14 @@
 	enum EBlendingType { None, Add, Multi, Alpha };
 	enum EShadowEffect { ZBuffer, PCF};
 
+	enum ELightType
+	{
+		Point,
+		Spot,
+		Directional,
+		Area
+	};
+
 	// Viewport size
 	const int gViewportWidth = 1920;
 	const int gViewportHeight = 1080;
@@ -43,7 +51,7 @@
 	// we have finished updating the scene. There is a structure in the shader code that exactly matches this one
 	struct PerFrameConstants
 	{	
-		const static int lightAmount = 2;//statics work differently therefore padding isn't neccessary here
+		const static int MAX_LIGHTS = 3;//statics work differently therefore padding isn't neccessary here
 
 		// These are the matrices used to position the camera
 		CMatrix4x4 viewMatrix;
@@ -59,8 +67,9 @@
 
 		CVector4   light2Position;
 
-		CVector3      padding3;
+		CVector2      padding3;
 		float gParallaxDepth;
+		int lightCount;
 
 		CVector3   light2Colour;
 		float blendAmount;
@@ -72,18 +81,18 @@
 		CVector3   cameraPosition;	
 		int shadowEffect;//Each shadow effect will have a number assigned to them, so that it will be easy to change on demand in C++. e.g. z-buffer = 0 pcf = 1 etc.
 
-		CVector3 lightFacings;
-		float lightCosHalfAngles;
+		CVector4 lightFacings[MAX_LIGHTS];
+		//float lightCosHalfAngles;
 
-		CMatrix4x4 lightViewMatrix;
-		CMatrix4x4 lightProjectionMatrix;
+		CMatrix4x4 lightViewMatrix[MAX_LIGHTS];
+		CMatrix4x4 lightProjectionMatrix[MAX_LIGHTS];
 
 
 
 		//Had to implement a CVector4 based on CVector3 as shaders only like getting stuff in chunks of 4 (16 bytes - 4 per var e.g. float = 4 bytes * 4 = 16)
-		CVector4 lightPositions[lightAmount];
+		CVector4 lightPositions[MAX_LIGHTS];
 
-		CVector4 lightColours[lightAmount];
+		CVector4 lightColours[MAX_LIGHTS];
 
 
 	};
@@ -98,11 +107,5 @@
 		//float      padding6;
 	};
 
-	//temp globals
-	//extern PerFrameConstants mPerFrameConstants;      // This variable holds the CPU-side constant buffer described above
-	//extern ID3D11Buffer*     mPerFrameConstantBuffer; // This variable controls the GPU-side constant buffer matching to the above structure
-
-	//extern PerModelConstants mPerModelConstants;      // This variable holds the CPU-side constant buffer described above
-	//extern ID3D11Buffer*     mPerModelConstantBuffer;  // This variable controls the GPU-side constant buffer related to the above structure
 
 #endif //_COMMON_H_INCLUDED_

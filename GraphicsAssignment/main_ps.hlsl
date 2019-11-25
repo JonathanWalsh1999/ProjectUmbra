@@ -89,7 +89,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	
 	// Get the height info from the normal map's alpha channel at the given texture coordinate
 	// Rescale from 0->1 range to -x->+x range, x determined by ParallaxDepth setting
-    float textureHeight = gParallaxDepth * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
+    float textureHeight = /*gParallaxDepth*/0.08f * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
 	
 	// Use the depth of the texture to offset the given texture coordinate - this corrected texture coordinate will be used from here on
     float2 offsetTexCoord = input.uv + textureHeight * textureOffsetDir;
@@ -116,70 +116,89 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	// Calculate lighting
 
     // Lighting equations
+    float3 totalDiffuseLight = float3(0, 0, 0);
+    float3 totalSpecularLight = float3(0, 0, 0);
 
-    // Light 1
-    float3 light1Vector = lightPositions[1].xyz - input.worldPosition;
-    float light1Distance = length(light1Vector);
-    float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
-    float3 diffuseLight1 = lightColours[1].xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
-    float3 halfway = normalize(light1Direction + cameraDirection);
-    float3 specularLight1 = diffuseLight1 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+    for (int i = 0; i < lightCount; ++i)
+    {    
+        float3 halfway;
+        float3 diffuseLight;
+        float3 specularLight;
+        ////////////////////////////////
+        //Point Light = 0
+        if (int(lightColours[i].w) == 0)
+        {
 
-    //SPOT LIGHT
-    // Light 2
-    float3 light2Vector = lightPositions[0].xyz - input.worldPosition;
-    float light2Distance = length(light2Vector);
-    float3 light2Direction = light2Vector / light2Distance;
+            float3 light1Vector = lightPositions[i].xyz - input.worldPosition;
+            float light1Distance = length(light1Vector);
+            float3 light1Direction = light1Vector / light1Distance; // Quicker than normalising as we have length for attenuation
+            diffuseLight = lightColours[i].xyz * max(dot(worldNormal, light1Direction), 0) / light1Distance;
 
-    float3 diffuseLight2 = 0.0f; //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+            halfway = normalize(light1Direction + cameraDirection);
+            specularLight = diffuseLight * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+        }
+        ////////////////////////////////
+        //Spot light = 1
+        else if (int(lightColours[i].w) == 1)//Spot light
+        {
+            float3 light2Vector = lightPositions[i].xyz - input.worldPosition;
+            float light2Distance = length(light2Vector);
+            float3 light2Direction = light2Vector / light2Distance;
 
-    //halfway = normalize(light2Direction + cameraDirection);
-    float3 specularLight2 = 0.0f; // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+            diffuseLight = 0.0f; //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
 
-    const float DepthAdjust = 0.0005f;
-    // Check if pixel is within light cone
-    if (dot(lightFacings, -light2Direction) > cos(lightCosHalfAngles))
-    {
-        // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
-	    // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
-	    // These are the same as the view / projection matrix multiplies in a vertex shader (can improve performance by putting these lines in vertex shader)
-        float4 light1ViewPosition = mul(lightViewMatrix, float4(input.worldPosition, 1));
-        float4 light1Projection = mul(lightProjectionMatrix, light1ViewPosition);
+            //halfway = normalize(light2Direction + cameraDirection);
+            specularLight = 0.0f; // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
 
-		// Convert 2D pixel position as viewed from light into texture coordinates for shadow map - an advanced topic related to the projection step
-		// Detail: 2D position x & y get perspective divide, then converted from range -1->1 to UV range 0->1. Also flip V axis
-        float2 shadowMapUV = 0.5f * light1Projection.xy / light1Projection.w + float2(0.5f, 0.5f);
-        shadowMapUV.y = 1.0f - shadowMapUV.y; // Check if pixel is within light cone
+            const float DepthAdjust = 0.0005f;
+            // Check if pixel is within light cone
+            if (dot(lightFacings[i].xyz, -light2Direction) > cos(lightFacings[i].w))
+            {
+                // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
+	            // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
+	            // These are the same as the view / projection matrix multiplies in a vertex shader (can improve performance by putting these lines in vertex shader)
+                float4 light1ViewPosition = mul(lightViewMatrix[i], float4(input.worldPosition, 1));
+                float4 light1Projection = mul(lightProjectionMatrix[i], light1ViewPosition);
 
-		// Get depth of this pixel if it were visible from the light (another advanced projection step)
-        float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
+		        // Convert 2D pixel position as viewed from light into texture coordinates for shadow map - an advanced topic related to the projection step
+		        // Detail: 2D position x & y get perspective divide, then converted from range -1->1 to UV range 0->1. Also flip V axis
+                float2 shadowMapUV = 0.5f * light1Projection.xy / light1Projection.w + float2(0.5f, 0.5f);
+                shadowMapUV.y = 1.0f - shadowMapUV.y; // Check if pixel is within light cone
+
+		        // Get depth of this pixel if it were visible from the light (another advanced projection step)
+                float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
 		
-        //User chooses shadow effect based on shadowEffect integer.  Would've been nice to use enums here but they're not supported by HLSL
-        float shadow = 0.0f;
-        if(shadowEffect == 0)
-        {
-           shadow = ZBuffer(depthFromLight, shadowMapUV);
-        }
-        else if(shadowEffect == 1)
-        {
-            shadow = PCF(4, depthFromLight, shadowMapUV);
-        }
+                //User chooses shadow effect based on shadowEffect integer.  Would've been nice to use enums here but they're not supported by HLSL
+                float shadow = 0.0f;
+                if (shadowEffect == 0)
+                {
+                    shadow = ZBuffer(depthFromLight, shadowMapUV);
+                }
+                else if (shadowEffect == 1)
+                {
+                    shadow = PCF(4, depthFromLight, shadowMapUV);
+                }
         
-        float3 light1Dist = length(lightPositions[0].xyz - input.worldPosition);
-        diffuseLight2 = (lightColours[0].xyz * max(dot(input.modelNormal, light2Direction), 0) / light1Dist) * shadow; // Equations from lighting lecture
-        halfway = normalize(light2Direction + cameraDirection);
-        specularLight2 = diffuseLight2 * pow(max(dot(input.modelNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
+                float3 light1Dist = length(lightPositions[i].xyz - input.worldPosition);
+                diffuseLight = ( (lightColours[i].xyz * max(dot(worldNormal, light2Direction), 0) ) * shadow) / light1Dist; // Equations from lighting lecture
+                halfway = normalize(light2Direction + cameraDirection);
+                specularLight = diffuseLight * pow(max(dot(worldNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
          
+            }
+        }
+        totalDiffuseLight += diffuseLight;
+        totalSpecularLight += specularLight;
     }
+
     // Sample diffuse material colour for this pixel from a texture using a given sampler that you set up in the C++ code
     // Ignoring any alpha in the texture, just reading RGB
     float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, offsetTexCoord); // Use offset texture coordinate from parallax mapping
     float3 diffuseMaterialColour = textureColour.rgb;
     float specularMaterialColour = textureColour.a;
 
-    float3 finalColour = (gAmbientColour + diffuseLight1 + diffuseLight2) * diffuseMaterialColour +
-                         (specularLight1 + specularLight2) * specularMaterialColour;
+    float3 finalColour = (gAmbientColour + totalDiffuseLight) * diffuseMaterialColour +
+                         totalSpecularLight * specularMaterialColour;
 
     return float4(finalColour, 1.0f); // Always use 1.0f for alpha - no alpha blending in this lab
 }
