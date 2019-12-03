@@ -100,10 +100,13 @@ public:
 	ID3D11ShaderResourceView* GetDiffuseSRVMap2();
 	ID3D11Resource* GetDiffuseMap2();
 	std::string GetTextureFile2();
+	ID3D11Resource* GetDiffuseMap3();
+	std::string GetTextureFile3();
+	ID3D11ShaderResourceView* GetDiffuseSRVMap3();
 	EBlendingType GetAddBlend() { return blend; }
 
 	void AddSecondaryTexture(const std::string& texture2);
-
+	void AddThirdTexture(const std::string& texture3);
 
 	//HOLD ALL OBJECTS IN THIS CLASS
 	static std::vector<IModel*> GetAllObjects();
@@ -129,8 +132,12 @@ private:
 	ID3D11ShaderResourceView* diffuseSpecularMap2SRV = nullptr;
 	ID3D11Resource* diffuseSpecular2Map = nullptr;
 
+	ID3D11ShaderResourceView* diffuseSpecularMap3SRV = nullptr;
+	ID3D11Resource* diffuseSpecular3Map = nullptr;
+
 	std::string textureFile = "";
 	std::string texture2File = "";
+	std::string texture3File = "";
 
 	ID3D11PixelShader* associatedPSShader = nullptr;
 	ID3D11VertexShader* associatedVSShader = nullptr;

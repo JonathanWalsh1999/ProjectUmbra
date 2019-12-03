@@ -23,7 +23,7 @@ Light::Light(IEngine * engine, ELightType type)
 		throw std::runtime_error(str);
 	}
 
-	mPerFrameConstants = myScene->GetFrameConstants();
+
 }
 Light::~Light() {}
 
@@ -69,34 +69,29 @@ void Light::SetModel(IModel* newModel)
 }
 
 
-void Light::RenderLight()
+void Light::RenderLight(PerFrameConstants& perFrameConstants, PerModelConstants& perModelConstants)
 {
-	mPerFrameConstants = myScene->GetFrameConstants();
-	mPerModelConstants = myEngine->GetModelConstants();
-
-	mPerFrameConstants.lightCount = mLightCount;
-	mPerFrameConstants.lightColours[mLightIndex] = mLightColour * mLightStrength;
-	mPerFrameConstants.lightColours[mLightIndex].w = static_cast<float>(mLightType);//Pass the light type to shaders, 
-	mPerFrameConstants.lightPositions[mLightIndex] = mLightPosition;				//so they know what sort of lighting to do e.g. point, spot etc.
+	perFrameConstants.lightCount = mLightCount;
+	perFrameConstants.lightColours[mLightIndex] = mLightColour * mLightStrength;
+	perFrameConstants.lightColours[mLightIndex].w = static_cast<float>(mLightType);//Pass the light type to shaders, 
+	perFrameConstants.lightPositions[mLightIndex] = mLightPosition;				//so they know what sort of lighting to do e.g. point, spot etc.
 
 	//View matrix for spotlight
 	CMatrix4x4 lightViewMatrix = InverseAffine(lightModel->WorldMatrix());
 	//projection matrix
 	CMatrix4x4 lightProjectionMatrix = myEngine->MakeProjectionMatrix(1.0f, ToRadians(coneAngle));
 
-	CVector3 lightFacings3 = { mPerFrameConstants.lightFacings[mLightIndex].x, mPerFrameConstants.lightFacings[mLightIndex].y , mPerFrameConstants.lightFacings[mLightIndex].z };
+	CVector3 lightFacings3 = { perFrameConstants.lightFacings[mLightIndex].x, perFrameConstants.lightFacings[mLightIndex].y , perFrameConstants.lightFacings[mLightIndex].z };
 
 	lightFacings3 = Normalise(lightModel->WorldMatrix().GetZAxis());
-	mPerFrameConstants.lightFacings[mLightIndex] = { lightFacings3.x, lightFacings3.y, lightFacings3.z, 0 };
-	mPerFrameConstants.lightFacings[mLightIndex].w = cos(ToRadians(coneAngle / 2));
-	mPerFrameConstants.lightViewMatrix[mLightIndex] = lightViewMatrix;
-	mPerFrameConstants.lightProjectionMatrix[mLightIndex] = lightProjectionMatrix;
+	perFrameConstants.lightFacings[mLightIndex] = { lightFacings3.x, lightFacings3.y, lightFacings3.z, 0 };
+	perFrameConstants.lightFacings[mLightIndex].w = cos(ToRadians(coneAngle / 2));
+	perFrameConstants.lightViewMatrix[mLightIndex] = lightViewMatrix;
+	perFrameConstants.lightProjectionMatrix[mLightIndex] = lightProjectionMatrix;
 	
-	mPerModelConstants.objectColour = mLightColour;
-	myEngine->SetModelConstants(mPerModelConstants);
-	mPerFrameConstants.ambientColour = mAmbientColour;
-	mPerFrameConstants.specularPower = mSpecularPower;
-	myScene->SetFrameConstants(mPerFrameConstants);
+	perModelConstants.objectColour = mLightColour;
+	perFrameConstants.ambientColour = mAmbientColour;
+	perFrameConstants.specularPower = mSpecularPower;
 }
 
 

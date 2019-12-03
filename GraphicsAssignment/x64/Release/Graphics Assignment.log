@@ -1,4 +1,7 @@
-﻿  compilation object save succeeded; see F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\BasicTransform_vs.cso
-F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\DepthOnly_ps.hlsl(16,36-40): error X4502: Shader model ps_4_0_level_9_3 doesn't allow reading from position semantics.
-  
-  compilation failed; no code produced
+﻿  SceneManager.cpp
+  Generating code
+  6 of 1260 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Graphics Assignment.vcxproj -> F:\FastUniversity\Project - DOUBLE\ProjectUmbra\GraphicsAssignment\\Graphics Assignment.exe

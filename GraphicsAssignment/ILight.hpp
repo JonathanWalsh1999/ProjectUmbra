@@ -32,7 +32,7 @@ public:
 	virtual void SetMesh(IMesh* newMesh) = 0;
 	virtual void SetModel(IModel* newModel) = 0;
 
-	virtual void RenderLight() = 0;
+	virtual void RenderLight(PerFrameConstants& perFrameConstants, PerModelConstants& perModelConstants) = 0;
 
 
 };

@@ -487,3 +487,67 @@ std::string Model::GetTextureFile2()
 {
 	return texture2File;
 }
+
+ID3D11Resource* Model::GetDiffuseMap3()
+{
+	return diffuseSpecular3Map;
+}
+std::string Model::GetTextureFile3()
+{
+	return texture3File;
+}
+void Model::AddThirdTexture(const std::string& texture3)
+{
+	mMediaFolders = Mesh::GetMediaFolders();
+	texture3File = texture3;
+
+	bool directory = false;
+	const char slash = '\\';
+	for (unsigned int i = 0; i < mMediaFolders.size(); ++i)
+	{
+		for (unsigned int j = 0; j < 2; ++j)
+		{
+			if (mMediaFolders[i][mMediaFolders[i].size() - j] == slash)
+			{
+				directory = true;
+			}
+			else
+			{
+				directory = false;
+			}
+		}
+		//if (newMesh != nullptr)
+		//{
+		if (directory)
+		{
+			if (!myEngine->LoadTexture(mMediaFolders[i] + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap3SRV))
+			{
+				//gLastError = "Error loading textures";
+			}
+
+		}
+		else
+		{
+			if (!myEngine->LoadTexture(mMediaFolders[i] + slash + texture2File, &diffuseSpecular2Map, &diffuseSpecularMap3SRV))
+			{
+				//gLastError = "Error loading textures";
+			}
+		}
+		//}
+		//else
+		//{
+		//	break;
+		//}
+	}
+	if (diffuseSpecular2Map == nullptr)
+	{
+		if (!myEngine->LoadTexture(texture2File, &diffuseSpecular2Map, &diffuseSpecularMap3SRV))
+		{
+			//gLastError = "Error loading textures";
+		}
+	}
+}
+ID3D11ShaderResourceView* Model::GetDiffuseSRVMap3()
+{
+	return diffuseSpecularMap3SRV;
+}

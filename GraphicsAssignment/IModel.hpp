@@ -89,6 +89,10 @@ public:
 	virtual ID3D11Resource* GetDiffuseMap2() = 0;
 	virtual std::string GetTextureFile2() = 0;
 	virtual EBlendingType GetAddBlend() = 0;
+	virtual ID3D11Resource* GetDiffuseMap3() = 0;
+	virtual std::string GetTextureFile3() = 0;
+	virtual ID3D11ShaderResourceView* GetDiffuseSRVMap3() = 0;
 
 	virtual void AddSecondaryTexture(const std::string& texture2) = 0;
+	virtual void AddThirdTexture(const std::string& texture3) = 0;
 };

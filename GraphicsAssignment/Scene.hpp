@@ -68,5 +68,10 @@ private:
 
 	ID3D11SamplerState* mPointSampler;
 	ID3D11SamplerState* mAnisotropic4xSampler;
+	
+	ID3D11DeviceContext* mD3DContext;
+	ID3D11Device* mD3DDevice;
+
+	ID3D11DepthStencilState* mDepthBufferState;
 };
 

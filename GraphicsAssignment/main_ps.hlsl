@@ -15,6 +15,9 @@ Texture2D DiffuseSpecularMap : register(t0); // Diffuse map (main colour) in rgb
 Texture2D NormalHeightMap : register(t1); // Normal map in rgb and height maps in alpha - C++ must load this into slot 1
 Texture2D ShadowMapLight1 : register(t2); // Texture holding the view of the scene from a light
 
+Texture2D DiffuseSpecularMap2 : register(t3);
+Texture2D HeightMap2 : register(t4);
+
 SamplerState TexSampler : register(s0); // A sampler is a filter for a texture like bilinear, trilinear or anisotropic
 SamplerState PointClamp : register(s1); // No filtering for shadow maps (you might think you could use trilinear or similar, but it will filter light depths not the shadows cast...)
 
@@ -49,7 +52,7 @@ float ZBuffer(float lightDepth, float2 shadowUVCoords)
     return shadowMapDepthValue;
 }
 
-float4 main(NormalMappingPixelShaderInput input) : SV_Target
+float4 main(NormalMappingPixelShaderInput input) : SV_Target0
 {
 	//************************
 	// Normal Map Extraction
@@ -89,7 +92,7 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
 	
 	// Get the height info from the normal map's alpha channel at the given texture coordinate
 	// Rescale from 0->1 range to -x->+x range, x determined by ParallaxDepth setting
-    float textureHeight = /*gParallaxDepth*/0.08f * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
+    float textureHeight = /*gParallaxDepth*/0.0f * (NormalHeightMap.Sample(TexSampler, input.uv).a - 0.5f);
 	
 	// Use the depth of the texture to offset the given texture coordinate - this corrected texture coordinate will be used from here on
     float2 offsetTexCoord = input.uv + textureHeight * textureOffsetDir;
@@ -119,12 +122,11 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
     float3 totalDiffuseLight = float3(0, 0, 0);
     float3 totalSpecularLight = float3(0, 0, 0);
 
-
+    float3 halfway = 0;
+    float3 diffuseLight = 0;
+    float3 specularLight = 0;
     for (int i = 0; i < lightCount; ++i)
     {    
-        float3 halfway;
-        float3 diffuseLight;
-        float3 specularLight;
         ////////////////////////////////
         //Point Light = 0
         if (int(lightColours[i].w) == 0)
@@ -187,13 +189,63 @@ float4 main(NormalMappingPixelShaderInput input) : SV_Target
          
             }
         }
+        ////////////////////////////////
+        //Directional light = 2
+        else if (int(lightColours[i].w) == 2)
+        {
+            float3 light2Vector = lightPositions[i].xyz - input.worldPosition;
+            float light2Distance = length(light2Vector);
+            float3 light2Direction = light2Vector / light2Distance;
+
+            diffuseLight = 0.0f; //   lightColours[0] * max(dot(worldNormal, light2Direction), 0) / light2Distance;
+
+            //halfway = normalize(light2Direction + cameraDirection);
+            specularLight = 0.0f; // = diffuseLight2 * pow(max(dot(worldNormal, halfway), 0), gSpecularPower);
+
+            const float DepthAdjust = 0.0005f;
+            // Check if pixel is within light cone
+            if (dot(lightFacings[i].xyz, -light2Direction) > cos(lightFacings[i].w))
+            {
+                
+                // Using the world position of the current pixel and the matrices of the light (as a camera), find the 2D position of the
+	            // pixel *as seen from the light*. Will use this to find which part of the shadow map to look at.
+	            // These are the same as the view / projection matrix multiplies in a vertex shader (can improve performance by putting these lines in vertex shader)
+                float4 light1ViewPosition = mul(lightViewMatrix[i], float4(input.worldPosition, 1));
+                float4 light1Projection = mul(lightProjectionMatrix[i], light1ViewPosition);
+
+		        // Convert 2D pixel position as viewed from light into texture coordinates for shadow map - an advanced topic related to the projection step
+		        // Detail: 2D position x & y get perspective divide, then converted from range -1->1 to UV range 0->1. Also flip V axis
+                float2 shadowMapUV = 0.5f * light1Projection.xy / light1Projection.w + float2(0.5f, 0.5f);
+                shadowMapUV.y = 1.0f - shadowMapUV.y; // Check if pixel is within light cone
+
+		        // Get depth of this pixel if it were visible from the light (another advanced projection step)
+                float depthFromLight = light1Projection.z / light1Projection.w - DepthAdjust; //*** Adjustment so polygons don't shadow themselves
+		
+                //User chooses shadow effect based on shadowEffect integer.  Would've been nice to use enums here but they're not supported by HLSL
+                float shadow = 0.0f;
+                if (shadowEffect == 0)
+                {
+                    shadow = ZBuffer(depthFromLight, shadowMapUV);
+                }
+                else if (shadowEffect == 1)
+                {
+                    shadow = PCF(4, depthFromLight, shadowMapUV);
+                }
+        
+                float3 light1Dist = length(lightPositions[i].xyz - input.worldPosition);
+                diffuseLight = ((lightColours[i].xyz * max(dot(worldNormal, light2Direction), 0)) * shadow); // Equations from lighting lecture
+                halfway = normalize(light2Direction + cameraDirection);
+                specularLight = diffuseLight * pow(max(dot(worldNormal, halfway), 0), gSpecularPower); // Multiplying by diffuseLight instead of light colour - my own personal preference
+         
+            }
+        }
         totalDiffuseLight += diffuseLight;
         totalSpecularLight += specularLight;
     }
 
     // Sample diffuse material colour for this pixel from a texture using a given sampler that you set up in the C++ code
     // Ignoring any alpha in the texture, just reading RGB
-    float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, offsetTexCoord); // Use offset texture coordinate from parallax mapping
+    float4 textureColour = DiffuseSpecularMap.Sample(TexSampler, offsetTexCoord) + DiffuseSpecularMap2.Sample(TexSampler, offsetTexCoord); // Use offset texture coordinate from parallax mapping
     float3 diffuseMaterialColour = textureColour.rgb;
     float specularMaterialColour = textureColour.a;
 

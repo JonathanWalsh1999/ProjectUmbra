@@ -25,9 +25,7 @@ private:
 
 	void CycleLightColours(ILight* chosenLight); //Change RGB values constantly
 	void UpdateColourChannels(float& channelValue, bool& rgbBool);
-
-
-
+	   
 	const std::string mMediaFolder = "media"; //Folder to store all files such as textures and meshes for scene
 
 	//Extract frame time
@@ -40,6 +38,8 @@ private:
 	IMesh* mSphereMesh;
 	IMesh* mCubeMesh;
 	IMesh* mLightMesh;
+	IMesh* mLampMesh;
+	IMesh* mHouseMesh;
 
 	//Models created in the scene
 	IModel* mHill;
@@ -53,6 +53,9 @@ private:
 	IModel* mLightModel1;
 	IModel* mLightModel2;
 	IModel* mLightModel3;
+	IModel* mLamp;
+	IModel* mLamp2;
+	IModel* mHouse;
 
 	//Create Lights
 	ILight* mLight1; //Spotlight
@@ -82,7 +85,7 @@ private:
 
 
 	//Constants effecting speed
-	const float PULSATE_SPEED = 10.0f;
+	const float PULSATE_SPEED = 1000.0f;
 	const float COLOUR_CHANGE_SPEED = 0.1f;
 	const float CUBE_MOVEMENT_SPEED = 100.0f;
 
@@ -101,8 +104,8 @@ private:
 	const std::string mCubeMeshFile = "Cube.x";
 
 	//Texture File Constants
-	const std::string mCobbleTextureFile = "CobbleDiffuseSpecular.dds";
-	const std::string mCobbleHeightTextureFile = "CobbleNormalHeight.dds";
+	const std::string mCobbleTextureFile = "CobbleDiffuse.tif";
+	const std::string mCobbleHeightTextureFile = "CobbleNormal.tif";
 	const std::string mTechTextureFile = "TechDiffuseSpecular.dds";
 	const std::string mTechHeightTextureFile = "TechNormalHeight.dds";
 	const std::string mStoneTextureFile = "StoneDiffuseSpecular.dds";

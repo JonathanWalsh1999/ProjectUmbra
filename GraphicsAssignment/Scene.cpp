@@ -6,6 +6,9 @@
 CScene::CScene(IEngine * engine)
 {
 	mEngine = engine;
+
+	mD3DContext = mEngine->GetContext();
+	mD3DDevice = mEngine->GetDevice();
 }
 
 CScene::~CScene()
@@ -19,8 +22,7 @@ bool CScene::InitGeometry()
 	// IMPORTANT NOTE: Will only keep the first object from the mesh - multipart objects will have parts missing - see later lab for more robust loader
 	try
 	{
-		//Load all meshes here
-		//lightMesh = new Mesh("Light.x");
+
 	}
 	catch (std::runtime_error e)  // Constructors cannot return error messages so use exceptions to catch mesh errors (fairly standard approach this)
 	{
@@ -55,15 +57,6 @@ bool CScene::InitGeometry()
 
 	//// Load / prepare textures on the GPU ////
 
-	// Load textures and create DirectX objects for them
-	// The LoadTexture function requires you to pass a ID3D11Resource* (e.g. &gCubeDiffuseMap), which manages the GPU memory for the
-	// texture and also a ID3D11ShaderResourceView* (e.g. &gCubeDiffuseMapSRV), which allows us to use the texture in shaders
-	// The function will fill in these pointers with usable data. The variables used here are globals found near the top of the file.
-	//if (!LoadTexture(".\\Flare.jpg", &gLightDiffuseMap, &gLightDiffuseMapSRV))
-	//{
-	//	gLastError = "Error loading textures";
-	//	return false;
-	//}
 
 	if (!ShadowDepthBuffer())
 	{		
@@ -84,11 +77,7 @@ bool CScene::InitScene()
 	mDepthOnly = LoadPixelShader("main_ps", mEngine);
 
 	mBasicPixel = LoadVertexShader("main_vs", mEngine);
-	//// Set up scene ////
-	//light = new Model(lightMesh);
 
-	//light->SetPosition({ 30, 300, 0 });
-	//light->SetScale(pow(gLight1Strength, 0.7f)); // Convert light strength into a nice value for the scale of the light - equation is ad-hoc.
 
 	//// Set up cameras ////
 
@@ -97,6 +86,7 @@ bool CScene::InitScene()
 	camera->SetRotation({ ToRadians(30.0f), 0.0f, 0.0f });
 	camera->SetNearClip(5);
 	camera->SetFarClip(100000.0f);
+	mDepthBufferState = mEngine->GetDepthBufferState();
 
 	return true;
 }
@@ -117,29 +107,16 @@ void CScene::RenderSceneFromCamera(ICamera * cam)
 	mPerFrameConstantBuffer = mEngine->GetFrameConstantBuffer();
 
 	// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-	mEngine->GetContext()->VSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
-	mEngine->GetContext()->PSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer);
+	mD3DContext->VSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
+	mD3DContext->PSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer);
 
 
 	//// Render lit models - ground first ////
 
-	// Select which shaders to use next ***
-//	mD3DContext->VSSetShader(gPixelLightingVertexShader, nullptr, 0);
-//	mD3DContext->PSSetShader(gPixelLightingPixelShader, nullptr, 0);
-
 	// States - no blending, normal depth buffer and culling
-	mEngine->GetContext()->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
-	mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthBufferState(), 0); //If objects are behind other objects they will not get rendered
-	mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
-
-
-
-	//// Select the texture and sampler to use in the pixel shader
-	//mD3DContext->PSSetShaderResources(0, 1, &gLightDiffuseMapSRV); // First parameter must match texture slot number in the shaer
-	//mD3DContext->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
-
-	////// Render model, sets world matrix, vertex and index buffer and calls Draw on the GPU
-	//gPerModelConstants.objectColour = gLight1Colour; // Set any per-model constants apart from the world matrix just before calling render (light colour here)
+	mD3DContext->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
+	mD3DContext->OMSetDepthStencilState(mEngine->GetDepthBufferState(), 0); //If objects are behind other objects they will not get rendered
+	mD3DContext->RSSetState(mEngine->GetCullBackState());
 }
 void CScene::RenderScene(float& frameTime)
 {
@@ -151,17 +128,37 @@ void CScene::RenderScene(float& frameTime)
 	mEngine->Messages();
 	mPerFrameConstants.cameraPosition = camera->Position();
 
+
 	RenderShadow(vp);
 
-	RenderDepthBufferFromLight(0);
+	// Select the shadow map texture as the current depth buffer. We will not be rendering any pixel colours
+	// Also clear the the shadow map depth buffer to the far distance
 
+	RenderDepthBufferFromLight(0);	
+
+	
+	mD3DContext->OMSetRenderTargets(0, nullptr, mShadowMapDepthStencil);
+	mD3DContext->ClearDepthStencilView(mShadowMapDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	std::vector<IModel*> allCurrentModels = mEngine->GetAllModels();
+	// Render models - no state changes required between each object in this situation (no textures used in this step)
+	for (unsigned int i = 0; i < allCurrentModels.size(); ++i)
+	{	
+		if (i == 0)
+		{
+			//This line effectively means, don't use any pixel shaders
+			mD3DContext->PSSetShader(NULL, NULL, 0);//Get's rid of warning about pixel shader expecting render target view bound to 0...
+					
+		}
+		allCurrentModels[i]->Render();
+	}
 
 
 	//// Render lights ////
 	// Rendered with different shaders, textures, states from other models
 	for (unsigned int i = 0; i < mLights.size(); ++i)
 	{
-		mEngine->GetAllLights()[i]->RenderLight();
+		mEngine->GetAllLights()[i]->RenderLight(mPerFrameConstants, mPerModelConstants);
 	}
 
 
@@ -170,13 +167,13 @@ void CScene::RenderScene(float& frameTime)
 	// Now set the back buffer as the target for rendering and select the main depth buffer.
 	// When finished the back buffer is sent to the "front buffer" - which is the monitor.
 	mBackBufferRenderTarget = mEngine->GetBackBufferRenderTarget();
-	mEngine->GetContext()->OMSetRenderTargets(1, &mBackBufferRenderTarget, mEngine->GetDepthStencil());
-	mEngine->GetContext()->ClearDepthStencilView(mEngine->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	mD3DContext->OMSetRenderTargets(1, &mBackBufferRenderTarget, mEngine->GetDepthStencil());
+	mD3DContext->ClearDepthStencilView(mEngine->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	mBackgroundColour = mEngine->GetBackgroundColour();
 
 	// Clear the back buffer to a fixed colour and the depth buffer to the far distance
-	mEngine->GetContext()->ClearRenderTargetView(mEngine->GetBackBufferRenderTarget(), &mBackgroundColour.r);
+	mD3DContext->ClearRenderTargetView(mEngine->GetBackBufferRenderTarget(), &mBackgroundColour.r);
 
 
 	// Setup the viewport to the size of the main window
@@ -186,27 +183,28 @@ void CScene::RenderScene(float& frameTime)
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	mEngine->GetContext()->RSSetViewports(1, &vp);
+	mD3DContext->RSSetViewports(1, &vp);
 
 
-	// Render the scene for the main window	
-
-	RenderSceneFromCamera(camera);
 
 	// Set shadow maps in shaders
 	// First parameter is the "slot", must match the Texture2D declaration in the HLSL code
 	// In this app the diffuse map uses slot 0, the shadow maps use slots 1 onwards. If we were using other maps (e.g. normal map) then
 	// we might arrange things differently
 	mPointSampler = mEngine->GetPointSampler();
-	mEngine->GetContext()->PSSetShaderResources(2, 1, &mShadowMapSRV);
-	mEngine->GetContext()->PSSetSamplers(1, 1, &mPointSampler);	
+	mD3DContext->PSSetShaderResources(2, 1, &mShadowMapSRV);
+	mD3DContext->PSSetSamplers(1, 1, &mPointSampler);
+
+	// Render the scene for the main window	
+
+	RenderSceneFromCamera(camera);
 	RenderModels();
 
-	//// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
+	// Unbind shadow maps from shaders - prevents warnings from DirectX when we try to render to the shadow maps again next frame
 	ID3D11ShaderResourceView* nullView = nullptr;
 	ID3D11SamplerState* nullSampler = nullptr;
-	mEngine->GetContext()->PSSetShaderResources(2, 1, &nullView);
-	mEngine->GetContext()->PSSetSamplers(1, 1, &nullSampler);
+	mD3DContext->PSSetShaderResources(2, 1, &nullView);
+	mD3DContext->PSSetSamplers(1, 1, &nullSampler);
 
 	UpdateScene(frameTime);
 	mEngine->GetSwapChain()->Present(0, 0);
@@ -217,32 +215,38 @@ void CScene::RenderModels()
 	for (unsigned int j = 0; j < mEngine->GetAllModels().size(); ++j)
 	{
 		//Set the correct vs and ps for each model
-		mEngine->GetContext()->PSSetShader(mEngine->GetAllModels()[j]->GetPSShader(), nullptr, 0);
+		mD3DContext->PSSetShader(mEngine->GetAllModels()[j]->GetPSShader(), nullptr, 0);
 		//mEngine->GetContext()->PSSetShader(mEngine->GetAllModels()[j]->GetPSShader(), nullptr, 0);
-		mEngine->GetContext()->VSSetShader(mEngine->GetAllModels()[j]->GetVSShader(), nullptr, 0);
+		mD3DContext->VSSetShader(mEngine->GetAllModels()[j]->GetVSShader(), nullptr, 0);
 
 		ID3D11ShaderResourceView* currentDiffuseSpecularMapSRV = nullptr;
 		ID3D11ShaderResourceView* secondaryDiffuseSpecularMapSRV = nullptr;
+		ID3D11ShaderResourceView* thirdDiffuseSpecularMapSRV = nullptr;
 
 		currentDiffuseSpecularMapSRV = mEngine->GetAllModels()[j]->GetDiffuseSRVMap();
 		secondaryDiffuseSpecularMapSRV = mEngine->GetAllModels()[j]->GetDiffuseSRVMap2();
+		thirdDiffuseSpecularMapSRV = mEngine->GetAllModels()[j]->GetDiffuseSRVMap3();
 
 		// Select the approriate textures and sampler to use in the pixel shader
-		mEngine->GetContext()->PSSetShaderResources(0, 1, &currentDiffuseSpecularMapSRV); // First parameter must match texture slot number in the shader
+		mD3DContext->PSSetShaderResources(0, 1, &currentDiffuseSpecularMapSRV); // First parameter must match texture slot number in the shader
 
 		if (mEngine->GetAllModels()[j]->GetDiffuseSRVMap2() != nullptr)
 		{
-			mEngine->GetContext()->PSSetShaderResources(1, 1, &secondaryDiffuseSpecularMapSRV);
+			mD3DContext->PSSetShaderResources(1, 1, &secondaryDiffuseSpecularMapSRV);
 		}
+		//if (mEngine->GetAllModels()[j]->GetDiffuseSRVMap3() != nullptr)
+		//{
+		//	mD3DContext->PSSetShaderResources(3, 1, &thirdDiffuseSpecularMapSRV);
+		//}
 		mAnisotropic4xSampler = mEngine->GetAnisotropic4xSampler();
-		mEngine->GetContext()->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
+		mD3DContext->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
 
 		if (mEngine->GetAllModels()[j]->GetAddBlend() == Add)
 		{
 			// States - additive blending, read-only depth buffer and no culling (standard set-up for blending
-			mEngine->GetContext()->OMSetBlendState(mEngine->GetAddBlendState(), nullptr, 0xffffff);
-			mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
-			mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
+			mD3DContext->OMSetBlendState(mEngine->GetAddBlendState(), nullptr, 0xffffff);
+			mD3DContext->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
+			mD3DContext->RSSetState(mEngine->GetCullBackState());
 			mEngine->GetAllModels()[j]->Render();
 
 
@@ -251,9 +255,9 @@ void CScene::RenderModels()
 			{
 				//NO BLENDING
 				// States - additive blending, read-only depth buffer and no culling (standard set-up for blending
-				mEngine->GetContext()->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
-				mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
-				mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
+				mD3DContext->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
+				mD3DContext->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
+				mD3DContext->RSSetState(mEngine->GetCullBackState());
 				mEngine->GetAllModels()[j]->Render();
 			}
 		}
@@ -261,24 +265,24 @@ void CScene::RenderModels()
 		{
 			//MULTIPLICATIVE BLENDING
 			// States - additive blending, read-only depth buffer and no culling (standard set-up for blending
-			mEngine->GetContext()->OMSetBlendState(mEngine->GetMultiBlendState(), nullptr, 0xffffff);
-			mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
-			mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
+			mD3DContext->OMSetBlendState(mEngine->GetMultiBlendState(), nullptr, 0xffffff);
+			mD3DContext->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
+			mD3DContext->RSSetState(mEngine->GetCullBackState());
 			mEngine->GetAllModels()[j]->Render();
 		}
 		else if (mEngine->GetAllModels()[j]->GetAddBlend() == Alpha)
 		{
 			//Alpha BLENDING
 			// States - additive blending, read-only depth buffer and no culling (standard set-up for blending
-			mEngine->GetContext()->OMSetBlendState(mEngine->GetAlphaBlendState(), nullptr, 0xffffff);
-			mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
-			mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
+			mD3DContext->OMSetBlendState(mEngine->GetAlphaBlendState(), nullptr, 0xffffff);
+			mD3DContext->OMSetDepthStencilState(mEngine->GetDepthReadOnlyState(), 0);
+			mD3DContext->RSSetState(mEngine->GetCullBackState());
 			mEngine->GetAllModels()[j]->Render();
 		}
 		else
 		{			
 			mEngine->GetAllModels()[j]->Render();
-			mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
+			mD3DContext->RSSetState(mEngine->GetCullBackState());
 
 		}
 
@@ -299,10 +303,7 @@ void CScene::RenderShadow(D3D11_VIEWPORT& vp)
 	vp.TopLeftY = 0;
 	mEngine->GetContext()->RSSetViewports(1, &vp);
 
-	// Select the shadow map texture as the current depth buffer. We will not be rendering any pixel colours
-	// Also clear the the shadow map depth buffer to the far distance
-	mEngine->GetContext()->OMSetRenderTargets(0, nullptr, mShadowMapDepthStencil);
-	mEngine->GetContext()->ClearDepthStencilView(mShadowMapDepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 
 }
 
@@ -356,7 +357,7 @@ bool CScene::ShadowDepthBuffer()
 	textureDesc.BindFlags = D3D10_BIND_DEPTH_STENCIL | D3D10_BIND_SHADER_RESOURCE; // Indicate we will use texture as a depth buffer and also pass it to shaders
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
-	if (FAILED(mEngine->GetDevice()->CreateTexture2D(&textureDesc, NULL, &mShadowMapTexture)))
+	if (FAILED(mD3DDevice->CreateTexture2D(&textureDesc, NULL, &mShadowMapTexture)))
 	{
 		mLastError = "Error creating shadow map texture";
 		return false;
@@ -368,7 +369,7 @@ bool CScene::ShadowDepthBuffer()
 	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Texture2D.MipSlice = 0;
 	dsvDesc.Flags = 0;
-	if (FAILED(mEngine->GetDevice()->CreateDepthStencilView(mShadowMapTexture, &dsvDesc, &mShadowMapDepthStencil)))
+	if (FAILED(mD3DDevice->CreateDepthStencilView(mShadowMapTexture, &dsvDesc, &mShadowMapDepthStencil)))
 	{
 		mLastError = "Error creating shadow map depth stencil view";
 		return false;
@@ -382,7 +383,7 @@ bool CScene::ShadowDepthBuffer()
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
-	if (FAILED(mEngine->GetDevice()->CreateShaderResourceView(mShadowMapTexture, &srvDesc, &mShadowMapSRV)))
+	if (FAILED(mD3DDevice->CreateShaderResourceView(mShadowMapTexture, &srvDesc, &mShadowMapSRV)))
 	{
 		mLastError = "Error creating shadow map shader resource view";
 		return false;
@@ -391,7 +392,6 @@ bool CScene::ShadowDepthBuffer()
 }
 void CScene::RenderDepthBufferFromLight(int lightIndex)
 {
-
 
 	// Get camera-like matrices from the spotlight, seet in the constant buffer and send over to GPU
 	mPerFrameConstants.viewMatrix = InverseAffine(mEngine->GetAllLights()[lightIndex]->GetModel()->WorldMatrix());
@@ -402,34 +402,25 @@ void CScene::RenderDepthBufferFromLight(int lightIndex)
 	mEngine->UpdateConstantBuffer(mPerFrameConstantBuffer, mPerFrameConstants);
 
 	// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-	mEngine->GetContext()->VSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
-	mEngine->GetContext()->PSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer);
+	mD3DContext->VSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
+	mD3DContext->PSSetConstantBuffers(0, 1, &mPerFrameConstantBuffer);
 
 
 	//// Only render models that cast shadows ////
 
 	// Use special depth-only rendering shaders
-	mEngine->GetContext()->VSSetShader(mBasicPixel, nullptr, 0);
-	mEngine->GetContext()->PSSetShader(mDepthOnly, nullptr, 0);
+	mD3DContext->VSSetShader(mBasicPixel, nullptr, 0);
+	mD3DContext->PSSetShader(mDepthOnly, nullptr, 0);
 
 	// States - no blending, normal depth buffer and culling
-	mEngine->GetContext()->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
-	mEngine->GetContext()->OMSetDepthStencilState(mEngine->GetDepthBufferState(), 0);
-	mEngine->GetContext()->RSSetState(mEngine->GetCullBackState());
-
+	mD3DContext->OMSetBlendState(mEngine->GetNoBlendState(), nullptr, 0xffffff);
+	mD3DContext->OMSetDepthStencilState(mDepthBufferState, 0);
+	mD3DContext->RSSetState(mEngine->GetCullBackState());
 
 	mAnisotropic4xSampler = mEngine->GetAnisotropic4xSampler();
-	mEngine->GetContext()->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
+	mD3DContext->PSSetSamplers(0, 1, &mAnisotropic4xSampler);
 	mPointSampler = mEngine->GetPointSampler();
-	mEngine->GetContext()->PSSetSamplers(1, 1, &mPointSampler);
-
-
-
-	// Render models - no state changes required between each object in this situation (no textures used in this step)
-	for (unsigned int i = 0; i < mEngine->GetAllModels().size(); ++i)
-	{
-		mEngine->GetAllModels()[i]->Render();
-	}		
+	mD3DContext->PSSetSamplers(1, 1, &mPointSampler);
 
 }
 

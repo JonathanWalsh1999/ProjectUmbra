@@ -19,8 +19,7 @@ CDX11Engine::CDX11Engine(_In_     HINSTANCE hInstance,
 	mlpCmdLine = lpCmdLine;
 	mnCmdShow = nCmdShow;
 	engineRunning = false;
-	myScene = new CScene(this);
-	mPerFrameConstants = myScene->GetFrameConstants();
+
 }
 
 CDX11Engine::CDX11Engine()
@@ -44,6 +43,8 @@ void CDX11Engine::StartWindowed()
 		MessageBoxA(mHWnd, mLastError.c_str(), NULL, MB_OK);
 		return;
 	}
+	myScene = new CScene(this);
+	mPerFrameConstants = myScene->GetFrameConstants();
 }
 
 void CDX11Engine::Messages()

@@ -27,8 +27,8 @@ CSceneManager::CSceneManager(IEngine * engine)
 
 		/*Code to be updated once per frame*/
 
-		//PulsateLight(mLight1, mLight1Strength);
-		CycleLightColours(mLight2);	
+		PulsateLight(mLight3, 20.0f);
+		//CycleLightColours(mLight2);	
 	
 
 
@@ -65,33 +65,29 @@ CSceneManager::CSceneManager(IEngine * engine)
 }
 
 void CSceneManager::LoadMeshes()
-{
+{	
+	mLampMesh = myEngine->LoadMesh("lamp.obj"); //https://www.cgtrader.com/free-3d-models/architectural/lighting/street-lamp-pbr
 	mHillMesh = myEngine->LoadMesh(mHillMeshFile);
-	mTeaPotMesh = myEngine->LoadMesh(mTeaMeshFile);
-	mSphereMesh = myEngine->LoadMesh(mSphereMeshFile);
-	mCubeMesh = myEngine->LoadMesh(mCubeMeshFile);
+	mHouseMesh = myEngine->LoadMesh("cottage.fbx");//https://www.cgtrader.com/free-3d-models/exterior/house/old-abandoned-cottage
+
 }
 
 void CSceneManager::CreateModels()
-{
+{	
+	mLamp = mLampMesh->CreateModel("lampDiffuse.png");
+	mLamp->AddSecondaryTexture("lampNormal.png");
+	mLamp->SetScale(0.05f);
 
-	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mLamp2 = mLampMesh->CreateModel("lampDiffuse.png", 200.0f, 0.0f, 150.0f);
+	mLamp2->AddSecondaryTexture("lampNormal.png");
+	mLamp2->SetScale(0.05f);
+
+	mHill = mHillMesh->CreateModel(mCobbleTextureFile, mHillPos.x, mHillPos.y, mHillPos.z);
 	mHill->AddSecondaryTexture(mCobbleHeightTextureFile);
-	mTeaPot = mTeaPotMesh->CreateModel(mTechTextureFile, mTeaPos.x, mTeaPos.y, mTeaPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mTeaPot->AddSecondaryTexture(mTechHeightTextureFile);
-	mSphere = mSphereMesh->CreateModel(mStoneTextureFile, mSpherePos.x, mSpherePos.y, mSpherePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mCube = mCubeMesh->CreateModel(mWoodTextureFile, mCubePos.x, mCubePos.y, mCubePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mCube->AddSecondaryTexture(mBrickTextureFile);
-	mCubeNormal = mCubeMesh->CreateModel(mPatternTextureFile, mCubeNormalPos.x, mCubeNormalPos.y, mCubeNormalPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mCubeNormal->AddSecondaryTexture(mPatternNormalTextureFile);
-	mCubeParallax = mCubeMesh->CreateModel(mTechTextureFile, mCubeParallaxPos.x, mCubeParallaxPos.y, mCubeParallaxPos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mCubeParallax->AddSecondaryTexture(mTechHeightTextureFile);
-	mCubeMultiplicative = mCubeMesh->CreateModel(mGlassTextureFile, mCubeMultiplicativePos.x, mCubeMultiplicativePos.y, mCubeMultiplicativePos.z,
-		mMainShaderFile.ps, mMainShaderFile.vs);
-	mCubeMultiplicative->SetAddBlend(Multi);
-	mSmoke = mCubeMesh->CreateModel(mSmokeTextureFile, mSmokePos.x, mSmokePos.y, mSmokePos.z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mSmoke->SetAddBlend(Alpha);
 
+	mHouse = mHouseMesh->CreateModel("cottage_diffuse.png", 10.0f, 0.0f, 180.0f);
+	mHouse->AddSecondaryTexture("cottage_normal.png");
+	mHouse->SetScale(0.05f);
 }
 
 void CSceneManager::SetUpScene()
@@ -108,7 +104,7 @@ void CSceneManager::SetUpLighting()
 {
 	EBlendingType newBlend = Add;
 
-	mLight1Strength = 100.0f;
+	mLight1Strength = 0.1f;
 	mLight1Position = { 0.0f, 80.0f, -100.0f, 0.0f };
 	mLight1ConeAngle = 90.0f;
 	mLight1Colour = { 1.0f, 1.0f, 1.0f,0.0f };
@@ -118,12 +114,12 @@ void CSceneManager::SetUpLighting()
 	mLightModelScale = 0.7f;
 
 	mLight2Strength = 10.0f;
-	mLight2Position = { 300.0f, 50.0f, 50.0f,0.0f };
+	mLight2Position = { 4.5f, 22.0f, 0.0f,0.0f };
 
-	mLight3Position = { -300.0f, 50.0f, 50.0f, 0.0f };
+	mLight3Position = { 192.0f, 22.0f, 150.0f, 0.0f };
 
 
-	mLight1 = myEngine->CreateLight(Spot);
+	mLight1 = myEngine->CreateLight(Directional);
 	mLight1->SetAmbientColour(mAmbientColour);
 	mLight1->SetLightColour(mLight1Colour);
 
@@ -135,40 +131,42 @@ void CSceneManager::SetUpLighting()
 	mLight1->SetMesh(mLightMesh);
 	mLightModel1 = mLightMesh->CreateModel(mLightTextureFile, mLight1->GetPosition().x, mLight1->GetPosition().y,
 														mLight1->GetPosition().z, mMainShaderFile.ps, mMainShaderFile.vs);
-
-	mLightModel1->SetScale(pow(mLight1->GetLightStrength(), mLightModelScale));
+															//Adjust for directional light as no attenuation
+	mLightModel1->SetScale(pow(mLight1->GetLightStrength() * 300.0f, mLightModelScale));
 	mLightModel1->SetAddBlend(newBlend);
 	mLight1->SetModel(mLightModel1);
 	lights.push_back(mLight1);
 
 	mLight2 = myEngine->CreateLight(Point);
+	mLightModel2 = mLightMesh->CreateModel("", mLight2->GetPosition().x, mLight2->GetPosition().y,
+														mLight2->GetPosition().z, mMainShaderFile.ps, mMainShaderFile.vs);
+	mLightModel2->SetAddBlend(newBlend);
+	mLight2->SetModel(mLightModel2);
 	mLight2->SetAmbientColour(mAmbientColour);
-
-	mLight2->SetLightStrength(mLight1Strength);
+	mLight2->SetLightColour({ 0.92f,0.65f, 0.18f, 0});
+	mLight2->SetLightStrength(10.0f);
 	mLight2->SetSpecularPower(mSpecularPower);
 	mLight2->SetPosition(mLight2Position);
 
 
-	mLightModel2 = mLightMesh->CreateModel(mLightTextureFile, mLight2->GetPosition().x, mLight2->GetPosition().y,
-														mLight2->GetPosition().z, mMainShaderFile.ps, mMainShaderFile.vs);
-	mLightModel2->SetAddBlend(newBlend);
-	mLightModel2->SetScale(pow(mLight2->GetLightStrength(), mLightModelScale));
-	mLight2->SetModel(mLightModel2);
-	//mLight2->AddToVector();
+
+	mLightModel2->SetScale(pow(10.0f, mLightModelScale));
+
+
 	lights.push_back(mLight2);
 
 	mLight3 = myEngine->CreateLight(Point);
-	mLight3->SetLightColour({1.0f, 1.0f,1.0f,0.0f});
-	mLightModel3 = mLightMesh->CreateModel(mLightTextureFile, mLight3->GetPosition().x, mLight3->GetPosition().y,
+	mLight3->SetLightColour({ 0.92f,0.65f, 0.18f,0 });
+	mLightModel3 = mLightMesh->CreateModel("", mLight3->GetPosition().x, mLight3->GetPosition().y,
 		mLight3->GetPosition().z, mMainShaderFile.ps, mMainShaderFile.vs);
 	mLightModel3->SetAddBlend(newBlend);
-	mLightModel3->SetScale(pow(mLight3->GetLightStrength(), mLightModelScale));
+	mLightModel3->SetScale(pow(10.0f, mLightModelScale));
 	mLight3->SetModel(mLightModel3);
 
 
 	mLight3->SetAmbientColour(mAmbientColour);
 
-	mLight3->SetLightStrength(mLight1Strength);
+	mLight3->SetLightStrength(20.0f);
 	mLight3->SetSpecularPower(mSpecularPower);
 	mLight3->SetPosition(mLight3Position);
 
@@ -181,23 +179,29 @@ void CSceneManager::SetUpLighting()
 void CSceneManager::PulsateLight(ILight* chosenLight, const float& lightStrength)
 {
 	static float pulsator = lightStrength;
-	static bool fadingIn = false;
+	static bool fadingIn = true;
 	if (!fadingIn)
 	{
-		//Light gets dimmer
-		pulsator -= mFrameTime * PULSATE_SPEED;
-		if (pulsator < 0.0f)
+		if (pulsator <= 0.0f)
 		{
 			fadingIn = true;
+		}
+		else
+		{
+			//Light gets dimmer
+			pulsator -= mFrameTime * PULSATE_SPEED;
 		}
 	}
 	else
 	{
-		//Light gets brighter
-		pulsator += mFrameTime * PULSATE_SPEED;
-		if (pulsator > lightStrength)
+		if (pulsator >= lightStrength)
 		{
 			fadingIn = false;
+		}
+		else
+		{
+			//Light gets brighter
+			pulsator += mFrameTime * PULSATE_SPEED;
 		}
 	}
 	chosenLight->SetLightStrength(pulsator);

@@ -30,7 +30,7 @@ public:
 	void SetMesh(IMesh* newMesh);
 	void SetModel(IModel* newModel);
 
-	void RenderLight();
+	void RenderLight(PerFrameConstants& perFrameConstants, PerModelConstants& perModelConstants);
 
 
 private:
@@ -52,11 +52,5 @@ private:
 
 	ID3D11PixelShader* mPSShader = nullptr;
 	ID3D11VertexShader* mVSShader = nullptr;
-
-	PerFrameConstants mPerFrameConstants;
-	PerModelConstants mPerModelConstants;
-
-	ID3D11Buffer* mPerFrameConstantBuffer;
-
 };
 
