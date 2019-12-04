@@ -49,6 +49,7 @@ bool LoadShaders()
 
 void ReleaseShaders()
 {
+	
 	//if (gLightModelVertexShader)     gLightModelVertexShader->Release();
 	//if (gLightModelPixelShader)      gLightModelPixelShader->Release();
 	//if (gNormalMappingVertexShader)  gNormalMappingVertexShader->Release();

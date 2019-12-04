@@ -34,7 +34,20 @@ public:
 				  KeyCode turnCW, KeyCode turnCCW, KeyCode moveForward, KeyCode moveBackward );
 
 
-
+	~Model()
+	{
+		if (mapTexture) mapTexture->Release();
+		if (depthStencil) depthStencil->Release();
+		if (textureShader) textureShader->Release();
+		if (diffuseSpecularMapSRV) diffuseSpecularMapSRV->Release();
+		if (diffuseSpecularMap) diffuseSpecularMap->Release();
+		if (diffuseSpecularMap2SRV) diffuseSpecularMap2SRV->Release();
+		if (diffuseSpecular2Map) diffuseSpecular2Map->Release();
+		if (diffuseSpecularMap3SRV) diffuseSpecularMap3SRV->Release();
+		if (diffuseSpecular3Map) diffuseSpecular3Map->Release();
+		if (associatedPSShader) associatedPSShader->Release();
+		if (associatedVSShader) associatedVSShader->Release();
+	}
 
 
 	//-------------------------------------

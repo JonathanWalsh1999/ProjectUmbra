@@ -318,6 +318,14 @@ void CDX11Engine::ShutdownDirect3D()
 	if (mBackBufferRenderTarget) mBackBufferRenderTarget->Release();
 	if (mSwapChain)              mSwapChain->Release();
 	if (mD3DDevice)              mD3DDevice->Release();
+	if (gLightDiffuseMap) gLightDiffuseMap->Release();
+	if (mShadowMapTexture) mShadowMapTexture->Release();
+	if (mShadowMapDepthStencil) mShadowMapDepthStencil->Release();
+	if (mShadowMapSRV) mShadowMapSRV->Release();
+	if (mDepthOnly) mDepthOnly->Release();
+	if (mBasicPixel) mBasicPixel->Release();
+
+	
 }
 
 //--------------------------------------------------------------------------------------
@@ -598,6 +606,9 @@ void CDX11Engine::ReleaseStates()
 	if (mAnisotropic4xSampler)   mAnisotropic4xSampler->Release();
 	if (mTrilinearSampler)       mTrilinearSampler->Release();
 	if (mPointSampler)           mPointSampler->Release();
+	if (mMultiplicativeBlendingState) mMultiplicativeBlendingState->Release();
+	if (mAlphaBlendingState) mAlphaBlendingState->Release();
+	
 }
 
 ILight* CDX11Engine::CreateLight(ELightType type)

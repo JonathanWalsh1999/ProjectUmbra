@@ -25,7 +25,11 @@ Light::Light(IEngine * engine, ELightType type)
 
 
 }
-Light::~Light() {}
+Light::~Light() 
+{
+	if (mPSShader) mPSShader->Release();
+	if (mVSShader) mVSShader->Release();
+}
 
 IMesh* Light::GetMesh() { return lightMesh; }
 IModel* Light::GetModel() { return lightModel; }

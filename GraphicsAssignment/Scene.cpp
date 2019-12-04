@@ -431,6 +431,11 @@ void CScene::ReleaseResources()
 	if (mShadowMapDepthStencil)  mShadowMapDepthStencil->Release();
 	if (mShadowMapSRV)           mShadowMapSRV->Release();
 	if (mShadowMapTexture)       mShadowMapTexture->Release();
+	if (mPerModelConstantBuffer) mPerModelConstantBuffer->Release();
+	if (mPerFrameConstantBuffer) mPerFrameConstantBuffer->Release();
+	if (mDepthOnly) mDepthOnly->Release();
+	if (mBasicPixel) mBasicPixel->Release();
+
 
 	for (unsigned int i = 0; i < mEngine->GetDiffuseSpecularMaps().size(); ++i)
 	{
@@ -438,8 +443,7 @@ void CScene::ReleaseResources()
 		if (mEngine->GetDiffuseSpecularMapSRVs()[i]) mEngine->GetDiffuseSpecularMapSRVs()[i]->Release();
 	}
 
-	if (mEngine->GetModelConstantBuffer())  mEngine->GetModelConstantBuffer()->Release();
-	if (mEngine->GetFrameConstantBuffer())  mEngine->GetFrameConstantBuffer()->Release();
+
 
 	ReleaseShaders();
 
