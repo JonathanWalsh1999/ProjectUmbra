@@ -1,0 +1,462 @@
+{
+  "models": [
+    {
+      "meshFileName": "Skybox.x",
+      "position": [ 0.0, 500.0, 0.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "lighthouse.obj",
+      "position": [ -680.0, -5.0, 0.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "Ground.x",
+      "position": [ 0.0, 0.0, 0.0 ],
+      "scale": 1.0,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "Ruins.obj",
+      "position": [ 300.0, 0.0, 0.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 80.0, 0.0 ]
+    },
+    {
+      "meshFileName": "Ruins.obj",
+      "position": [ 350.0, 0.0, 50.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 80.0, 0.0 ]
+    },
+    {
+      "meshFileName": "Ruins.obj",
+      "position": [ -500.0, 0.0, 0.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 80.0, 0.0 ]
+    },
+    {
+      "meshFileName": "Ruins.obj",
+      "position": [ -550.0, 0.0, 50.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 80.0, 0.0 ]
+    },
+    {
+      "meshFileName": "House.obj",
+      "position": [ 10.0, 0.0, 100.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+
+    {
+      "meshFileName": "medieval house.obj",
+      "position": [ -250.0, 0.0, 100.0 ],
+      "scale": 15.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+    {
+      "meshFileName": "House.obj",
+      "position": [ -370.0, 0.0, 100.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+    {
+      "meshFileName": "OldHouse.obj",
+      "position": [ -115.0, 0.0, 100.0 ],
+      "scale": 10.0,
+      "rotation": [ 0.0, 194.7, 0.0 ]
+    },
+    {
+      "meshFileName": "medieval.obj",
+      "position": [ -370.0, 0.0, -100.0 ],
+      "scale": 15.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+    {
+      "meshFileName": "medieval house.obj",
+      "position": [ -200.0, 0.0, -100.0 ],
+      "scale": 15.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+    {
+      "meshFileName": "medieval.obj",
+      "position": [ -50.0, 0.0, -100.0 ],
+      "scale": 15.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+    {
+      "meshFileName": "OldHouse.obj",
+      "position": [ 100.0, 0.0, -140.0 ],
+      "scale": 15.0,
+      "rotation": [ 0.0, 34.5, 0.0 ]
+    },
+
+
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ -320.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ -250.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ -180.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ -110.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ -40.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ 30.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ 100.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+    {
+      "meshFileName": "street_lamp_obj.obj",
+      "position": [ 170.0, 0.0, 0.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 80.1, 0.0 ]
+    },
+
+
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 0.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 30.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 60.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 90.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 120.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 150.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -30.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -60.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -90.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -120.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -150.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -180.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -210.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -240.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -270.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -300.0, 0.0, 250.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 50.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 80.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 110.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 140.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 190.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 240.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ 20.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -10.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -40.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -70.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -100.0, 0.0, 300.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+
+    
+
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -240.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -270.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -300.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -330.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -340.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -390.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    },
+    {
+      "meshFileName": "2632.obj",
+      "position": [ -420.0, 0.0, 350.0 ],
+      "scale": 0.05,
+      "rotation": [ 0.0, 0.0, 0.0 ]
+    }
+
+
+
+  ],
+  "lights": [
+    {
+      "meshFileName": "Light.x",
+      "position": [ -680.0, 120.0, 0.0, 0.0 ],
+      "lightStrength": 200.0,
+      "coneAngle": 120.0,
+      "lightColour": [ 1.0, 1.0, 1.0, 0.0 ],
+      "ambientColour": [ 0.0, 0.1, 0.1 ],
+      "specularPower": 512.0,
+      "modelScale": 3.7,
+      "lightType": "Spot"
+    },
+
+    {
+      "meshFileName": "Light.x",
+      "position": [ -34.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ 34.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ 104.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ 174.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+
+    {
+      "meshFileName": "Light.x",
+      "position": [ -105.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ -185.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ -245.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    },
+    {
+      "meshFileName": "Light.x",
+      "position": [ -325.5, 22.0, 0.0, 0.0 ],
+      "lightStrength": 10.0,
+      "coneAngle": 90.0,
+      "lightColour": [ 0.92, 0.65, 0.18, 0.0 ],
+      "ambientColour": [ 0.1, 0.1, 0.1 ],
+      "specularPower": 256.0,
+      "modelScale": 0.7,
+      "lightType": "Point"
+    }
+
+  ]
+}

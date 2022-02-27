@@ -1,0 +1,11 @@
+#Ignore all media files
+media/
+
+#ignore build files
+x64/
+
+#Ignore visual studio generated files
+.vs/
+
+
+
